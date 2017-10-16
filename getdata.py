@@ -3,6 +3,7 @@ from lxml import html
 import re
 import MySQLdb
 from datetime import datetime
+import sys
 
 SETCSurl = 'https://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S'#SET Common Stocks
 SETWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=SET&language=en&country=US&type=W' #SET Warrants
@@ -70,10 +71,9 @@ def tosql(list):
 
 
 
-stocks = Getdate(url[3])
+stocks = Getdate(url[int(sys.argv[1])-1])
 data = FormatData(stocks)
 ShowData(data)
 raw_input("Press Enter to continue...")
 tosql(data)
 print "############################# Done ##############################"
-
