@@ -39,5 +39,8 @@ def MACD(data):
 		x = x +1 
 	return macd
 
+def RSI(data):
+	
+
 data = getData("AAV")
 MACD(data = data)
