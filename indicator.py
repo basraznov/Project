@@ -18,7 +18,6 @@ def EMA(day,data):
 	sma = sma/day
 	ema = []
 	ema.append(sma)
-	#for i in range(1,len(data)):
 	i = 1
 	k = day + i
 	while k < len(data):
@@ -26,8 +25,19 @@ def EMA(day,data):
 		tmp = ema[i-1]+(2.0/(day+1))*(data[k-1][5]-ema[i-1])
 		ema.append(tmp)
 		i = i+1
-	print ema 
-			
+	return ema
+
+def MACD(data):
+	macd = [0.0]
+	ema12 = EMA(day=12,data=data)
+	ema26 = EMA(day=26,data=data)
+	macd[0] = float(ema12[0]-ema26[0])
+	x = 1
+	while x < len(ema26):
+		tmp = ema12[x+14] - ema26[x]
+		macd.append(tmp)
+		x = x +1 
+	return macd
 
 data = getData("AAV")
-EMA(day=5,data=data)
+MACD(data = data)
