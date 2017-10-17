@@ -54,31 +54,50 @@ def MACD(data):
 	return macd
 
 def RSI(day,data):
-	GL=[0.0]
-	print data[0][5],
+	GL=[]
 	for x in range(1,len(data)):
-		print data[x],
 		tmp = data[x]-data[x-1]
 		GL.append(tmp)
 	GL = flaot2deciamal(GL)
-	AG = 0.0
-	AL = 0.0
-	for x in range(0,day):
+	G = 0.0
+	L = 0.0
+	AG = []
+	AL = []
+	for x in range(0,day-1):
 		if GL[x] > 0.0:
-			AG = AG + GL[x]
+			G = G + GL[x]
 		else:
-			AL = AL + GL[x]
-	AG = AG/day
-	AL = AL/day
-	RS = AG/AL
-	print AG,AL,RS
+			L = L + GL[x]
+	L = L*(-1)
+	AG.append(G/day)
+	AL.append(L/day)
+	RS = AG[0]/AL[0]
 	RSI = [0.0]
 	RSI[0] = 100-(100/(1+RS))
-	print RSI[0]
+	i = 1
+	G = 0.0
+	L = 0.0
+	for x in range(day,len(data)):
+		GL = data[x]-data[x-1]
+		if GL < 0:
+			L = GL*(-1)
+			G = 0.0
+		else:
+			G = GL
+			L = 0.0
+		AG.append(((AG[i-1]*13)+G)/day)
+		AL.append(((AL[i-1]*13)+L)/day)
+		RS = AG[i]/AL[i]
+		tmp = 100-(100/(1+RS))
+		RSI.append(tmp)
+		i = i +1
+	RSI = flaot2deciamal(RSI)
+	return RSI
+		
 
 
-
-data = getData("AAV")
+data = getData("AAV") 
 data = getLast(data)
-print MACD(data)
-# RSI(day=14,data = data)
+print data
+#data = [1559.35,1560.98,1566.92,1577.65,1576.68,1578.70,1586.79,1598.13,1591.65,1568.25,1543.67,1529.52,1478.97,1523.95,1544.03,1560.87,1544.57,1561.06]
+print RSI(day=14,data = data)
