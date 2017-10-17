@@ -90,8 +90,9 @@ def RSI(day,data):
 		RS = AG[i]/AL[i]
 		tmp = 100-(100/(1+RS))
 		RSI.append(tmp)
-		i = i +1
+		i+=1
 	RSI = flaot2deciamal(RSI)
+	
 	return RSI
 		
 
