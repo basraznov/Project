@@ -25,7 +25,7 @@ def getData(Symbol):
 def EMA(day,data):
 	sma = 0.0
 	for x in range(1,day+1):
-		sma = sma + data[day-x][5]	
+		sma = sma + data[day-x]	
 	sma = sma/day
 	ema = []
 	ema.append(sma)
@@ -33,7 +33,7 @@ def EMA(day,data):
 	k = day + i
 	while k < len(data):
 		k = day+i 
-		tmp = ema[i-1]+(2.0/(day+1))*(data[k-1][5]-ema[i-1])
+		tmp = ema[i-1]+(2.0/(day+1))*(data[k-1]-ema[i-1])
 		ema.append(tmp)
 		i = i+1
 	ema = flaot2deciamal(ema)
@@ -78,6 +78,6 @@ def RSI(day,data):
 
 
 data = getData("AAV")
-print getLast(data)
-# print EMA(5,[11,12,13,14,15,16,17])
+#print getLast(data)
+print EMA(5,[11,12,13,14,15,16,17])
 # RSI(day=14,data = data)
