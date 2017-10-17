@@ -40,13 +40,14 @@ def EMA(day,data):
 	return ema
 
 def MACD(data):
-	macd = [0.0]
+	macd = []
 	ema12 = EMA(day=12,data=data)
 	ema26 = EMA(day=26,data=data)
-	macd[0] = ema12[0]-ema26[0]
-	x = 1
+	x = 0
 	while x < len(ema26):           
 		tmp = ema12[x+14] - ema26[x]
+		# print ema12[x+14], ema26[x]
+		# break
 		macd.append(tmp)
 		x = x +1
 	macd = flaot2deciamal(macd)
@@ -56,8 +57,8 @@ def RSI(day,data):
 	GL=[0.0]
 	print data[0][5],
 	for x in range(1,len(data)):
-		print data[x][5],
-		tmp = data[x][5]-data[x-1][5]
+		print data[x],
+		tmp = data[x]-data[x-1]
 		GL.append(tmp)
 	GL = flaot2deciamal(GL)
 	AG = 0.0
@@ -79,5 +80,5 @@ def RSI(day,data):
 
 data = getData("AAV")
 data = getLast(data)
-print  MACD(data)
+print MACD(data)
 # RSI(day=14,data = data)
