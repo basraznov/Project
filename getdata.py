@@ -62,6 +62,8 @@ def tosql(list):
         data = [date,list[x][0],list[x][1],list[x][2],list[x][3],list[x][4],list[x][6],list[x][9],list[x][10]]
         for y in range(len(data)):
             if data[y] == '-' or data[y] == 'N/A':
+                if data[y] == 'N/A':
+                    print "Add new",data[y-5]
                 data[y] = None
         cursor = mydb.cursor()
         sql = 'INSERT INTO trade(`Date`,`Symbol`,`Open`,`High`,`Low`,`Last`,`ChPer`,`Volumn`,`Money`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)'
