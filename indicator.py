@@ -43,7 +43,7 @@ def MACD(data):
 	macd = [0.0]
 	ema12 = EMA(day=12,data=data)
 	ema26 = EMA(day=26,data=data)
-	macd[0] = float(ema12[0]-ema26[0])
+	macd[0] = ema12[0]-ema26[0]
 	x = 1
 	while x < len(ema26):           
 		tmp = ema12[x+14] - ema26[x]
@@ -78,6 +78,6 @@ def RSI(day,data):
 
 
 data = getData("AAV")
-#print getLast(data)
-print EMA(5,[11,12,13,14,15,16,17])
+data = getLast(data)
+print  MACD(data)
 # RSI(day=14,data = data)
