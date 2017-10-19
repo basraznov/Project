@@ -5,10 +5,10 @@ import MySQLdb
 from datetime import datetime
 import sys
 
-SETCSurl = 'https://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S'#SET Common Stocks
-SETWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=SET&language=en&country=US&type=W' #SET Warrants
-MAICSurl = 'https://marketdata.set.or.th/mkt/commonstocklistresult.do?market=mai&type=S'#MAI Common Stocks
-MAIWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=mai&language=en&country=US&type=W' #MAI Warrants
+SETCSurl = 'https://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S'#SET Common Stocks 1
+SETWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=SET&language=en&country=US&type=W' #SET Warrants 2
+MAICSurl = 'https://marketdata.set.or.th/mkt/commonstocklistresult.do?market=mai&type=S'#MAI Common Stocks 3
+MAIWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=mai&language=en&country=US&type=W' #MAI Warrants 4
 
 url = [SETCSurl,SETWurl,MAICSurl,MAIWurl]
 def ShowData(data):
