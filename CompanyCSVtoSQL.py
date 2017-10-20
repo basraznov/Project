@@ -3,7 +3,7 @@ import MySQLdb
 
 mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
 cursor = mydb.cursor()
-csv_data = csv.reader(file('Company.csv'))
+csv_data = csv.reader(open('Company.csv'))
 i = 0
 for row in csv_data:
 	for i in range(0,len(row)):
@@ -15,4 +15,4 @@ for row in csv_data:
 	cursor.execute(sql,data)
 	mydb.commit()
 cursor.close()
-print "Done"
+print ("Done")

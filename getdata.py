@@ -13,9 +13,9 @@ MAIWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=mai&langua
 url = [SETCSurl,SETWurl,MAICSurl,MAIWurl]
 def ShowData(data):
     for x in range(len(data)):
-        print data[x]
+        print (data[x])
 
-def FormatData(list):
+def FormatData(input):
     w=11
     h=1
     data = [['' for x in range(w)] for y in range(h)]
@@ -23,16 +23,17 @@ def FormatData(list):
     Symbol = 0
     x = 0
     count = 0
-    while x < len(list):
-        if list[x] == 'SET' or list[x] == 'SET50' or list[x] == 'SET100' or list[x] == 'sSET' or list[x] == 'SETHD' or list[x] == 'mai':
+    input = list(input)
+    while x < len(input):
+        if input[x] == 'SET' or input[x] == 'SET50' or input[x] == 'SET100' or input[x] == 'sSET' or input[x] == 'SETHD' or input[x] == 'mai':
             x = x + 8
             continue
         else:
-            if (list[x].find(' ') != -1 or list[x] == 'SP' or list[x] == 'NP' or list[x] == 'XR' or list[x] == 'XD' or list[x] == 'XA' or list[x] == 'XW') and list[x] != 'S & J':
+            if (input[x].find(' ') != -1 or input[x] == 'SP' or input[x] == 'NP' or input[x] == 'XR' or input[x] == 'XD' or input[x] == 'XA' or input[x] == 'XW') and input[x] != 'S & J':
                 x = x + 1
                 continue
 
-            data[Symbol][i] = list[x]
+            data[Symbol][i] = input[x]
             i=i+1
             if i%w == 0:
                 if data[Symbol][i-1] != '-':
@@ -67,7 +68,7 @@ def addNewCompany(symbol):
         url = 'https://www.set.or.th/set/companyprofile.do?symbol='+symbol+'&ssoPageId=4&language=en&country=US'
         r = requests.get(url)
         if 'color:red' in r.content:
-            print "Error can't find Symbol [",symbol,"]"
+            print ("Error can't find Symbol [",symbol,"]")
             return False
         tree = html.fromstring(r.content)
         element = tree.xpath('//table[@class="table"]/tr/td/div/div//text()')
@@ -96,16 +97,17 @@ def addNewCompany(symbol):
         cursor.close()
         return True
     else:
-        print "Error Check your database symbol = ",symbol," is appear on database"
-        print results
+        print ("Error Check your database symbol = ",symbol," is appear on database")
+        print (results)
         return False
 
-def tosql(list):
+def tosql(input):
+    input = list(input)
     name = []
     mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
     date = str(datetime.now()).split(" ")[0]
-    for x in range(len(list)-1):
-        data = [date,list[x][0],list[x][1],list[x][2],list[x][3],list[x][4],list[x][6],list[x][9],list[x][10]]
+    for x in range(len(input)-1):
+        data = [date,input[x][0],input[x][1],input[x][2],input[x][3],input[x][4],input[x][6],input[x][9],input[x][10]]
         for y in range(len(data)):
             if data[y] == '-' or data[y] == 'N/A':
                 if data[y] == 'N/A':
@@ -116,15 +118,15 @@ def tosql(list):
         cursor.execute(sql,data)
         mydb.commit()
     cursor.close()
-    print "############################# Done ##############################"
+    print ("############################# Done ##############################")
     if name:
-        raw_input("Press Enter to auto add company or ctrl+c to exit")
+        input("Press Enter to auto add company or ctrl+c to exit")
         for x in name:
-            print "Adding new Symbol [",x,"]"
+            print ("Adding new Symbol [",x,"]")
             if addNewCompany(x):
-                print "Adding Symbol [",x,"] success"
+                print ("Adding Symbol [",x,"] success")
             else:
-                print "Addin Symbol [",x,"] Fail"
+                print ("Addin Symbol [",x,"] Fail")
 
 
 
@@ -133,6 +135,6 @@ def tosql(list):
 stocks = GetdateFromWeb(url[int(sys.argv[1])-1])
 data = FormatData(stocks)
 ShowData(data)
-raw_input("Press Enter for add data into database or ctrl+c to exit")
+input("Press Enter for add data into database or ctrl+c to exit")
 tosql(data)
 
