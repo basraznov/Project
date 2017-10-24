@@ -1,7 +1,7 @@
 import csv
-import MySQLdb
+import pymysql
 
-mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+mydb = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
 cursor = mydb.cursor()
 csv_data = csv.reader(file('Trade.csv'))
 i = 0

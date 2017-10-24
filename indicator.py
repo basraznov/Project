@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql
 
 
 def flaot2deciamal(data):
@@ -15,7 +15,7 @@ def getLast(data):
 
 
 def getData(Symbol):
-	db = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
 	sql = "SELECT * FROM `trade` WHERE Symbol = %s"
 	data=[Symbol]
 	cursor = db.cursor()
