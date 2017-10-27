@@ -76,9 +76,8 @@ def RSI(day,data):
 	return RSI
 		
 
-
-data = getData("AAV") 
-data = getLast(data)
-#data = [1559.35,1560.98,1566.92,1577.65,1576.68,1578.70,1586.79,1598.13,1591.65,1568.25,1543.67,1529.52,1478.97,1523.95,1544.03,1560.87,1544.57,1561.06]
-print(RSI(day=14,data = data))
-print(MACD(data = data))
+# data = getData("AAV") 
+# data = getLast(data)
+# data = [1559.35,1560.98,1566.92,1577.65,1576.68,1578.70,1586.79,1598.13,1591.65,1568.25,1543.67,1529.52,1478.97,1523.95,1544.03,1560.87,1544.57,1561.06]
+# print(RSI(day=14,data = data))
+# print(MACD(data = data))

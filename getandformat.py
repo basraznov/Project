@@ -21,3 +21,15 @@ def getData(Symbol):
 	cursor.execute(sql,data)
 	results = cursor.fetchall()
 	return results
+
+def getVol(data):
+	data = list(data)
+	newdata=[]
+	for x in range(0,len(data)):
+		newdata.append(data[x][7])
+	return newdata
+
+
+data = getData("AAV")
+data = getVol(data)
+
