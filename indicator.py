@@ -47,8 +47,6 @@ def RSI(day,data):
 		else:
 			G.append(0)
 			L.append(x*(-1))
-	print(G,len(G))
-	print(L,len(L))
 	AG = []
 	AL = []
 	RS = []
@@ -62,12 +60,10 @@ def RSI(day,data):
 	AG = flaot2deciamal(AG)
 	AL.append(SL/day)
 	AL = flaot2deciamal(AL)
-	
 	RS.append(AG[0]/AL[0])
 	RS = flaot2deciamal(RS)
 	RSI.append(100-(100/(1+RS[0])))
 	RSI = flaot2deciamal(RSI)
-	x = day
 	#print(x,data[x],G[x-1],L[x-1],AG[x-day],AL[x-day],RS[-1],RSI[-1])
 	x = day+1
 	while(x < len(data)):
