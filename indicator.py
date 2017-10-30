@@ -98,5 +98,5 @@ AAV = getLast(AAV)
 # print(EMA(day=5,data=data))
 #print(data)
 data = [46.1250,47.1250,46.4375,46.9375,44.9375,44.2500,44.6250,45.7500,47.8125,47.5625,47.0000,44.5625,46.3125,47.6875,46.6875,45.6875,43.0625,43.5625,44.8750,43.6875]
-print(RSI(day=14,data = AAV))
+print(RSI(day=10,data = AAV))
 #print(MACD(data = AAV))	
