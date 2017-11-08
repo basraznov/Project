@@ -67,7 +67,7 @@ def addNewCompany(symbol):
     if row == 0:
         url = 'https://www.set.or.th/set/companyprofile.do?symbol='+symbol+'&ssoPageId=4&language=en&country=US'
         r = requests.get(url)
-        if 'color:red' in r.content:
+        if "color:red".encode('utf-8') in r.content:
             print ("Error can't find Symbol [",symbol,"]")
             return False
         tree = html.fromstring(r.content)
@@ -79,6 +79,7 @@ def addNewCompany(symbol):
         market = None
         industry = None
         sector = None
+        element = list(element)
         for x in range(0,len(element)):
             if element[x] == 'Company Name' and element[x+1] != '-':
                 companyName =  element[x+1]
@@ -120,13 +121,11 @@ def tosql(input):
     cursor.close()
     print ("############################# Done ##############################")
     if name:
-        input("Press Enter to auto add company or ctrl+c to exit")
-        for x in name:
-            print ("Adding new Symbol [",x,"]")
-            if addNewCompany(x):
-                print ("Adding Symbol [",x,"] success")
-            else:
-                print ("Addin Symbol [",x,"] Fail")
+        return name
+    else:
+        return None
+    
+    
 
 
 
@@ -135,6 +134,29 @@ def tosql(input):
 stocks = GetdateFromWeb(url[int(sys.argv[1])-1])
 data = FormatData(stocks)
 ShowData(data)
-input("Press Enter for add data into database or ctrl+c to exit")
-tosql(data)
+while True:
+    print("Press Y for add data into database or N to exit",end=" ")
+    a = input()
+    if a == 'y' or a=='Y':
+        name = tosql(data)
+        break
+    if a == 'n' or a =='N':
+        break
 
+if name != None:
+    print("Found New Symble Press Y to auto add company or N to exit",end=" ")
+    a = input()
+    while True:
+        if a == 'y' or a=='Y':
+            for x in name:
+                print ("All Symbol : ",name)
+                print ("Adding new Symbol [",x,"]")
+                if addNewCompany(x):
+                    print ("Adding Symbol [",x,"] success")
+                else:
+                    print ("Addin Symbol [",x,"] Fail")
+            break
+        if a == 'n' or a =='N':
+            break
+
+        
