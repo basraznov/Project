@@ -134,6 +134,7 @@ def tosql(input):
 stocks = GetdateFromWeb(url[int(sys.argv[1])-1])
 data = FormatData(stocks)
 ShowData(data)
+name = None
 while True:
     print("Press Y for add data into database or N to exit",end=" ")
     a = input()
