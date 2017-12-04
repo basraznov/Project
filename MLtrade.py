@@ -15,15 +15,22 @@ model.compile(optimizer='rmsprop',
 
 stock = gf.getData("AAV")
 Last = gf.getLast(stock)
-Chper = gf.getChPer(Last)
+Chper = gf.getChPer(stock)
 Vol = gf.getVol(stock)
 MACD = indi.MACD(Last)
 RSI = indi.RSI(data=Last,day=14)
 AvgVol = indi.AVG(Vol)
 NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
-
-
-
+answer = []
+for x in range(0,len(Last)-1):
+    if Last[x] > Last[x+1]:
+        answer.append(-1)
+    elif Last[x] < Last[x+1]:
+        answer.append(1)
+    else:
+        answer.append(0)
+answer.append(None)
+print(len(Last),len(Vol),len(RSI),len(answer),len(NomalZ))
 # model.fit(data,labels,epochs=1,batch_size=100)
 
 # fname = "plusSave.hdf5"
