@@ -29,6 +29,13 @@ def getVol(data):
 		newdata.append(data[x][7])
 	return newdata
 
+def getChPer(data):
+	data = list(data)
+	newdata=[]
+	for x in range(0,len(data)):
+		newdata.append(data[x][6])
+	return newdata
+
 
 data = getData("AAV")
 data = getVol(data)

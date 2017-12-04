@@ -90,14 +90,14 @@ def AVG(data):
 
 
 
-data = getData("ABPIF")
+# data = getData("ABPIF")
 # data = getVol(data)
 # avgVol = AVG(data)
-data = getLast(data)
+# data = getLast(data)
 # print(data)
 # data = [1559.35,1560.98,1566.92,1577.65,1576.68,1578.70,1586.79,1598.13,1591.65,1568.25,1543.67,1529.52,1478.97,1523.95,1544.03,1560.87,1544.57,1561.06]
 # print(EMA(day=5,data=data))
 # data = [22.27,22.19,22.08,22.17,22.18,22.13,22.23,22.43,22.24,22.29,22.15,22.39,22.38,22.61,23.36,24.05]
 # print(MACD(data = data))
-print(RSI(data=data,day=14))
+# print(RSI(data=data,day=14))
 # print(MACD(data = AAV))	
