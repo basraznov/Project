@@ -42,6 +42,7 @@ def Normaliz(data,avg):
 	for x in range(0,len(data)):
 		newdata.append(data[x]/(avg+data[x]))
 	return newdata
+
 # data = getData("AAV")
 # data = getVol(data)
 
