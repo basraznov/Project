@@ -36,7 +36,12 @@ def getChPer(data):
 		newdata.append(data[x][6])
 	return newdata
 
-
+def Normaliz(data,avg):
+	data = list(data)
+	newdata = []
+	for x in range(0,len(data)):
+		newdata.append(data[x]/(avg+data[x]))
+	return newdata
 # data = getData("AAV")
 # data = getVol(data)
 
