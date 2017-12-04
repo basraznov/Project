@@ -20,7 +20,8 @@ Vol = gf.getVol(stock)
 MACD = indi.MACD(Last)
 RSI = indi.RSI(data=Last,day=14)
 AvgVol = indi.AVG(Vol)
-NomalZ = Normaliz(data)
+NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
+
 
 
 # model.fit(data,labels,epochs=1,batch_size=100)

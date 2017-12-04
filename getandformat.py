@@ -43,6 +43,18 @@ def Normaliz(data,avg):
 		newdata.append(data[x]/(avg+data[x]))
 	return newdata
 
+def AVG(data):
+	data = list(data)
+	sum = 0.0
+	for x in data:
+		sum += x
+	avg = sum/len(data)
+	return avg
+
 # data = getData("AAV")
 # data = getVol(data)
-
+# print(data)
+# AVG = AVG(data)
+# data = Normaliz(data=data,avg=AVG)
+# print(data)
+# print(AVG)
