@@ -37,6 +37,6 @@ def getChPer(data):
 	return newdata
 
 
-data = getData("AAV")
-data = getVol(data)
+# data = getData("AAV")
+# data = getVol(data)
 
