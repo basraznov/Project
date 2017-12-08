@@ -3,6 +3,7 @@ from keras.layers import Dense, Activation
 import numpy as np
 import indicator as indi
 import getandformat as gf
+import buyorsell as bs
 
 def diminput(Symblo):
     stock = gf.getData(Symblo)
@@ -27,8 +28,9 @@ def diminput(Symblo):
     dim.append(Chper)
     dim.append(RSI)
     dim.append(NomalZ)
-    # print(dim[0][0],dim[1][0],dim[2][0])
-    print(EMA12,len(EMA12),len(stock))    
+    dim.append(MACD)
+    print(dim[0][0],dim[1][0],dim[2][0],dim[3][0])
+    print(len(EMA12),len(Chper),len(MACD),len(RSI),len(NomalZ))    
     # print(len(Last),len(Vol),len(RSI),len(answer),len(NomalZ),len(MACD))
 
 
