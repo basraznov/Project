@@ -17,7 +17,7 @@ def EMA(day,data):
 		ema.append(tmp)
 		i = i+1
 	ema = flaot2deciamal(ema)
-	for x in range(0,day):
+	for x in range(0,day-1):
 		ema.insert(0, None)
 	return ema
 
@@ -33,8 +33,8 @@ def MACD(data):
 		macd.append(tmp)
 		x = x +1
 	macd = flaot2deciamal(macd)
-	for x in range(0,26):
-		macd.append(None)
+	for x in range(0,25):
+		macd.insert(0,None)
 	return macd
 
 def RSI(day,data):
@@ -70,7 +70,6 @@ def RSI(day,data):
 	RS = flaot2deciamal(RS)
 	RSI.append(100-(100/(1+RS[0])))
 	RSI = flaot2deciamal(RSI)
-	#print(x,data[x],G[x-1],L[x-1],AG[x-day],AL[x-day],RS[-1],RSI[-1])
 	x = day+1
 	while(x < len(data)):
 		AG.append((AG[x-day-1]*13+G[x-1])/14)
@@ -83,7 +82,7 @@ def RSI(day,data):
 		RSI = flaot2deciamal(RSI)
 		x += 1
 	for x in range(0,day):
-		RSI.append(None)
+		RSI.insert(0,None)
 	return RSI
 		
 

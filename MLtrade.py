@@ -4,6 +4,33 @@ import numpy as np
 import indicator as indi
 import getandformat as gf
 
+def diminput(Symblo):
+    stock = gf.getData(Symblo)
+    Last = gf.getLast(stock)
+    Chper = gf.getChPer(stock)
+    Vol = gf.getVol(stock)
+    MACD = indi.MACD(Last)
+    RSI = indi.RSI(data=Last,day=14)
+    AvgVol = indi.AVG(Vol)
+    NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
+    EMA12 = indi.EMA(data=Last,day=12)
+    answer = []
+    for x in range(0,len(Last)-1):
+        if Last[x] > Last[x+1]:
+            answer.append(-1)
+        elif Last[x] < Last[x+1]:
+            answer.append(1)
+        else:
+            answer.append(0)
+    answer.append(None)
+    dim = []
+    dim.append(Chper)
+    dim.append(RSI)
+    dim.append(NomalZ)
+    # print(dim[0][0],dim[1][0],dim[2][0])
+    print(EMA12,len(EMA12),len(stock))    
+    # print(len(Last),len(Vol),len(RSI),len(answer),len(NomalZ),len(MACD))
+
 
 model = Sequential()
 model.add(Dense(35, activation='relu', input_dim=2))
@@ -12,25 +39,9 @@ model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
+diminput("AAV")
 
-stock = gf.getData("AAV")
-Last = gf.getLast(stock)
-Chper = gf.getChPer(stock)
-Vol = gf.getVol(stock)
-MACD = indi.MACD(Last)
-RSI = indi.RSI(data=Last,day=14)
-AvgVol = indi.AVG(Vol)
-NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
-answer = []
-for x in range(0,len(Last)-1):
-    if Last[x] > Last[x+1]:
-        answer.append(-1)
-    elif Last[x] < Last[x+1]:
-        answer.append(1)
-    else:
-        answer.append(0)
-answer.append(None)
-print(len(Last),len(Vol),len(RSI),len(answer),len(NomalZ))
+
 # model.fit(data,labels,epochs=1,batch_size=100)
 
 # fname = "plusSave.hdf5"
