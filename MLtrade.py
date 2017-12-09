@@ -14,7 +14,7 @@ def diminput(Symblo):
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVG(Vol)
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
-    EMA12 = indi.EMA(data=Last,day=12)
+    EMA5 = indi.EMA(data=Last,day=5)
     answer = []
     for x in range(0,len(Last)-1):
         if Last[x] > Last[x+1]:
@@ -24,14 +24,36 @@ def diminput(Symblo):
         else:
             answer.append(0)
     answer.append(None)
+    Elogic = [None]
+    for x in range(1,len(Last)):
+        if bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == None or bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == None:
+            Elogic.append(None)
+        elif bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == False and bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == False:
+            Elogic.append(0)
+        elif bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == True and bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == False:
+            Elogic.append(1)
+        elif bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == False and bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == True:
+            Elogic.append(-1)
+        else:
+            Elogcn.append(9)
     dim = []
-    dim.append(Chper)
-    dim.append(RSI)
-    dim.append(NomalZ)
-    dim.append(MACD)
-    print(dim[0][0],dim[1][0],dim[2][0],dim[3][0])
-    print(len(EMA12),len(Chper),len(MACD),len(RSI),len(NomalZ))    
-    # print(len(Last),len(Vol),len(RSI),len(answer),len(NomalZ),len(MACD))
+    temp = []
+    for x in range(0,len(Last)):
+        if(Chper[x] == None):
+            Chper[x] = 0
+        if(RSI[x] == None or NomalZ[x] == None or MACD[x] == None or Elogic[x] == None):
+            continue
+        temp.append(Chper[x]/100)
+        temp.append(RSI[x]/100)
+        temp.append(NomalZ[x])
+        temp.append(MACD[x])
+        temp.append(Elogic[x])
+        dim.append(temp)
+        temp = []
+    for x in range(0,len(dim)):
+        print(x,dim[x])
+    # print(len(Chper),len(RSI),len(NomalZ),len(MACD),len(Elogic))
+    print(dim)
 
 
 model = Sequential()
