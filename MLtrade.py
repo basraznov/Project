@@ -4,10 +4,14 @@ import numpy as np
 import indicator as indi
 import format as gf
 import buyorsell as bs
+import sys
+import traceback
 
 
 def diminput(Symblo):
     stock = gf.getData(Symblo)
+    if len(stock) < 60:
+        return None,None
     Last = gf.getLast(stock)
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
@@ -72,22 +76,34 @@ def connector(data1,data2):
 
 
 model = Sequential()
-model.add(Dense(35, activation='relu', input_dim=5))
+model.add(Dense(20, activation='relu', input_dim=5))
+model.add(Dense(25, activation='softmax'))
+model.add(Dense(25, activation='softmax'))
 model.add(Dense(1, activation='softmax'))
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
 symbol = gf.allSymbol()
-# data,labels = diminput(symbol[0])
-data,labels = diminput("AFC")
-# print(symbol[12])
-# for x in range(1,12):
-#     dataT,labelsT= diminput(symbol[x])
-#     data = connector(data,dataT)
-#     labels = connector(labels,labelsT)
+data,labels = diminput(symbol[0])
+# print(symbol[88])
+# data,labels = diminput(symbol[88])
+max = 200
+for x in range(101,max):
+    sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/max) )
+    sys.stdout.flush()
+    try:
+        dataT,labelsT= diminput(symbol[x])
+        if dataT == None or labelsT == None:
+            continue
+        data = connector(data,dataT)
+        labels = connector(labels,labelsT)
+    except Exception as e:
+        print("Error in "+str(x)+" symbol is "+symbol[x])
+        traceback.print_exc()
+        exit()
 
-# model.fit(data,labels,epochs=100,batch_size=1000)
+model.fit(data,labels,epochs=10000,batch_size=1000)
 
 # fname = "plusSave.hdf5"
 # model.save_weights(fname,overwrite=True)
