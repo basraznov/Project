@@ -1,4 +1,5 @@
 import pymysql
+import re
 
 def flaot2deciamal(data):
 	data = [ '%.3f' % elem for elem in data ]
@@ -51,10 +52,12 @@ def AVG(data):
 	avg = sum/len(data)
 	return avg
 
-# data = getData("AAV")
-# data = getVol(data)
-# print(data)
-# AVG = AVG(data)
-# data = Normaliz(data=data,avg=AVG)
-# print(data)
-# print(AVG)
+def allSymbol():
+	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+	sql = "SELECT DISTINCT Symbol from trade"
+	cursor = db.cursor()
+	cursor.execute(sql)
+	results = cursor.fetchall()
+	results = [str(i) for i in results]
+	results = [re.sub(",|\'|\(|\)", '', x) for x in results]
+	return results
