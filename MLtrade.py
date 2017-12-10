@@ -5,22 +5,6 @@ import indicator as indi
 import getandformat as gf
 import buyorsell as bs
 
-
-def findanswer(Symblo):
-    stock = gf.getData(Symblo)
-    Last = gf.getLast(stock)
-    answer = []
-    for x in range(0,len(Last)-1):
-        if Last[x] > Last[x+1]:
-            answer.append(-1)
-        elif Last[x] < Last[x+1]:
-            answer.append(1)
-        else:
-            answer.append(0)
-    answer.append(None)
-    return answer
-
-
 def diminput(Symblo):
     stock = gf.getData(Symblo)
     Last = gf.getLast(stock)
@@ -31,8 +15,16 @@ def diminput(Symblo):
     AvgVol = indi.AVG(Vol)
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
+    answer = []
+    for x in range(0,len(Last)-1):
+        if Last[x] > Last[x+1]:
+            answer.append(-1)
+        elif Last[x] < Last[x+1]:
+            answer.append(1)
+        else:
+            answer.append(0)
+    answer.append(None)
     Elogic = [None]
-    answer = findanswer(Symblo)
     for x in range(1,len(Last)):
         buy = bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x])
         sell = bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x])
@@ -62,9 +54,18 @@ def diminput(Symblo):
         temp = []
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
+    answer.pop()
+    dim.pop()
     for x in range(0,len(dim)):
         print(x,dim[x],answer[x])
+    return answer,dim
 
+
+
+def connector(data1,data2):
+    for x in range(0,len(data2)):
+        data1.append(data2[x])
+    return data1
 
 
 
@@ -75,7 +76,9 @@ model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
-diminput("AAV")
+temp = diminput("AAV")
+data = temp.dim
+answer = temp.answer
 
 
 # model.fit(data,labels,epochs=1,batch_size=100)
