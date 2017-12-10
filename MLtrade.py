@@ -56,9 +56,9 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    for x in range(0,len(dim)):
-        print(x,dim[x],answer[x])
-    return answer,dim
+    # for x in range(0,len(dim)):
+    #     print(x,dim[x],answer[x])
+    return dim,answer
 
 
 
@@ -70,18 +70,18 @@ def connector(data1,data2):
 
 
 model = Sequential()
-model.add(Dense(35, activation='relu', input_dim=2))
-model.add(Dense(10, activation='softmax'))
+model.add(Dense(35, activation='relu', input_dim=5))
+model.add(Dense(1, activation='softmax'))
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
-temp = diminput("AAV")
-data = temp.dim
-answer = temp.answer
 
+data,labels= diminput("AAV")
+# for x in range(0,len(data)):
+#     print(data[x],labels[x])
 
-# model.fit(data,labels,epochs=1,batch_size=100)
+model.fit(data,labels,epochs=1,batch_size=1000)
 
 # fname = "plusSave.hdf5"
 # model.save_weights(fname,overwrite=True)
