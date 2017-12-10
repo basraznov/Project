@@ -10,6 +10,8 @@ def getLast(data):
 	data = list(data)
 	newdata=[]
 	for x in range(0,len(data)):
+		if data[x][5] == None:
+			continue
 		newdata.append(data[x][5])
 	return newdata
 
@@ -27,6 +29,8 @@ def getVol(data):
 	data = list(data)
 	newdata=[]
 	for x in range(0,len(data)):
+		if data[x][5] == None:
+			continue
 		newdata.append(data[x][7])
 	return newdata
 
@@ -34,6 +38,8 @@ def getChPer(data):
 	data = list(data)
 	newdata=[]
 	for x in range(0,len(data)):
+		if data[x][5] == None:
+			continue
 		newdata.append(data[x][6])
 	return newdata
 

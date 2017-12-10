@@ -14,7 +14,7 @@
 #     ถือ
 
 import pymysql
-from getandformat import *
+from format import *
 
 
 

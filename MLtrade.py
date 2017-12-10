@@ -2,8 +2,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation
 import numpy as np
 import indicator as indi
-import getandformat as gf
+import format as gf
 import buyorsell as bs
+
 
 def diminput(Symblo):
     stock = gf.getData(Symblo)
@@ -16,6 +17,7 @@ def diminput(Symblo):
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
     answer = []
+    Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
         if Last[x] > Last[x+1]:
             answer.append(-1)
@@ -76,12 +78,16 @@ model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
+symbol = gf.allSymbol()
+# data,labels = diminput(symbol[0])
+data,labels = diminput("AFC")
+# print(symbol[12])
+# for x in range(1,12):
+#     dataT,labelsT= diminput(symbol[x])
+#     data = connector(data,dataT)
+#     labels = connector(labels,labelsT)
 
-data,labels= diminput("AAV")
-# for x in range(0,len(data)):
-#     print(data[x],labels[x])
-
-model.fit(data,labels,epochs=1,batch_size=1000)
+# model.fit(data,labels,epochs=100,batch_size=1000)
 
 # fname = "plusSave.hdf5"
 # model.save_weights(fname,overwrite=True)
