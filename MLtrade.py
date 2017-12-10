@@ -5,6 +5,22 @@ import indicator as indi
 import getandformat as gf
 import buyorsell as bs
 
+
+def findanswer(Symblo):
+    stock = gf.getData(Symblo)
+    Last = gf.getLast(stock)
+    answer = []
+    for x in range(0,len(Last)-1):
+        if Last[x] > Last[x+1]:
+            answer.append(-1)
+        elif Last[x] < Last[x+1]:
+            answer.append(1)
+        else:
+            answer.append(0)
+    answer.append(None)
+    return answer
+
+
 def diminput(Symblo):
     stock = gf.getData(Symblo)
     Last = gf.getLast(stock)
@@ -15,27 +31,21 @@ def diminput(Symblo):
     AvgVol = indi.AVG(Vol)
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
-    answer = []
-    for x in range(0,len(Last)-1):
-        if Last[x] > Last[x+1]:
-            answer.append(-1)
-        elif Last[x] < Last[x+1]:
-            answer.append(1)
-        else:
-            answer.append(0)
-    answer.append(None)
     Elogic = [None]
+    answer = findanswer(Symblo)
     for x in range(1,len(Last)):
-        if bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == None or bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == None:
+        buy = bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x])
+        sell = bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x])
+        if buy == None or sell == None:
             Elogic.append(None)
-        elif bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == False and bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == False:
+        elif buy == False and sell == False:
             Elogic.append(0)
-        elif bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == True and bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == False:
+        elif buy == True and sell == False:
             Elogic.append(1)
-        elif bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x]) == False and bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x]) == True:
+        elif buy == False and sell == True:
             Elogic.append(-1)
         else:
-            Elogcn.append(9)
+            Elogic.append(9)
     dim = []
     temp = []
     for x in range(0,len(Last)):
@@ -50,10 +60,12 @@ def diminput(Symblo):
         temp.append(Elogic[x])
         dim.append(temp)
         temp = []
+    for x in range(0,len(answer)-len(dim)):
+        answer.pop(0)
     for x in range(0,len(dim)):
-        print(x,dim[x])
-    # print(len(Chper),len(RSI),len(NomalZ),len(MACD),len(Elogic))
-    print(dim)
+        print(x,dim[x],answer[x])
+
+
 
 
 model = Sequential()
