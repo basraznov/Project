@@ -73,29 +73,38 @@ def connector(data1,data2):
         data1.append(data2[x])
     return data1
 
-
+def tranfromAnswer(answer):
+    tmp = []
+    for x in range(0,len(answer)):
+        if answer[x] == -1:
+            tmp.append([1,0,0])
+        if answer[x] == 0:
+            tmp.append([0,1,0])
+        if answer[x] == 1:
+            tmp.append([0,0,1])
+    return tmp
 
 model = Sequential()
 model.add(Dense(20, activation='relu', input_dim=5))
-model.add(Dense(25, activation='softmax'))
-model.add(Dense(25, activation='softmax'))
-model.add(Dense(1, activation='softmax'))
+# model.add(Dense(25, activation='relu'))
+model.add(Dense(25, activation='relu'))
+model.add(Dense(3, activation='sigmoid'))
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
 symbol = gf.allSymbol()
-data,labels = diminput(symbol[0])
-# print(symbol[88])
-# data,labels = diminput(symbol[88])
+data,answer = diminput(symbol[0])
+labels = tranfromAnswer(answer)
 max = 200
-for x in range(101,max):
+for x in range(1,max):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/max) )
     sys.stdout.flush()
     try:
-        dataT,labelsT= diminput(symbol[x])
-        if dataT == None or labelsT == None:
+        dataT,answerT = diminput(symbol[x])
+        if dataT == None or answerT == None:
             continue
+        labelsT =  tranfromAnswer(answerT)
         data = connector(data,dataT)
         labels = connector(labels,labelsT)
     except Exception as e:
@@ -103,10 +112,12 @@ for x in range(101,max):
         traceback.print_exc()
         exit()
 
-model.fit(data,labels,epochs=10000,batch_size=1000)
+# for x in range(200,210):
+#     print(data[x],labels[x])
+model.fit(data,labels,epochs=1000,batch_size=500)
 
-# fname = "plusSave.hdf5"
-# model.save_weights(fname,overwrite=True)
+fname = "plusSave.hdf5"
+model.save_weights(fname,overwrite=True)
 # model.load_weights(fname)
 # p = model.predict([[2,3],[4,5],[1,3],[9,6],[8,9],[8,6],[7,4]])
 # for x in p:
