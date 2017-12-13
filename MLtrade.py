@@ -7,6 +7,7 @@ import buyorsell as bs
 import sys
 import traceback
 
+fname = "Save.hdf5"
 
 def diminput(Symblo):
     stock = gf.getData(Symblo)
@@ -46,13 +47,30 @@ def diminput(Symblo):
             Elogic.append(9)
     dim = []
     temp = []
-    for x in range(0,len(Last)):
+    for x in range(0,len(Chper)):
         if(Chper[x] == None):
             Chper[x] = 0
+        else:
+            Chper[x] = Chper[x]/10
+    Chper = gf.flaot2deciamal(Chper)
+
+    for x in range(0,len(RSI)):
+        if(RSI[x] == None):
+            RSI[x] = 0
+        RSI[x] = RSI[x]/1000
+    RSI = gf.flaot2deciamal(RSI)
+
+    for x in range(0,len(Elogic)):
+        if(Elogic[x] == None):
+            Elogic[x] = 0
+        Elogic[x] = Elogic[x]/100
+    Elogic = gf.flaot2deciamal(Elogic)
+
+    for x in range(0,len(Last)):
         if(RSI[x] == None or NomalZ[x] == None or MACD[x] == None or Elogic[x] == None):
             continue
-        temp.append(Chper[x]/100)
-        temp.append(RSI[x]/100)
+        temp.append(Chper[x])
+        temp.append(RSI[x])
         temp.append(NomalZ[x])
         temp.append(MACD[x])
         temp.append(Elogic[x])
@@ -66,7 +84,7 @@ def diminput(Symblo):
     #     print(x,dim[x],answer[x])
     return dim,answer
 
-
+#มูลละค่าของแต่ละตัว/มูลราคาซื้อขายทั้งหมดของแต่ละวัน 
 
 def connector(data1,data2):
     for x in range(0,len(data2)):
@@ -85,20 +103,24 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(20, activation='relu', input_dim=5))
-# model.add(Dense(25, activation='relu'))
-model.add(Dense(25, activation='relu'))
-model.add(Dense(3, activation='sigmoid'))
+model.add(Dense(5, activation='sigmoid', input_dim=5))
+# model.add(Dense(20, activation='sigmoid'))
+model.add(Dense(60, activation='sigmoid'))
+model.add(Dense(3, activation='softmax'))
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
+# model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
+start = 0
 symbol = gf.allSymbol()
-data,answer = diminput(symbol[0])
+data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
-max = 200
-for x in range(1,max):
-    sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/max) )
+SRAnswer = answer
+
+stop = 1
+for x in range(start+1,stop):
+    sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
     sys.stdout.flush()
     try:
         dataT,answerT = diminput(symbol[x])
@@ -107,19 +129,47 @@ for x in range(1,max):
         labelsT =  tranfromAnswer(answerT)
         data = connector(data,dataT)
         labels = connector(labels,labelsT)
+        SRAnswer = connector(SRAnswer,answerT)
     except Exception as e:
         print("Error in "+str(x)+" symbol is "+symbol[x])
         traceback.print_exc()
         exit()
+print()
+# k = 0
+# for x in range(0,len(data)-1):
+#     if data[x][4] == answer[x]:
+#         k+=1
+# print(k,len(data))
 
-# for x in range(200,210):
+# for x in range(0,len(data)):
 #     print(data[x],labels[x])
-model.fit(data,labels,epochs=1000,batch_size=500)
+# d = []
+# l =[]
+# for x in range(0,20):
+#     l.append(labels[x])
+#     d.append(data[x])
 
-fname = "plusSave.hdf5"
-model.save_weights(fname,overwrite=True)
-# model.load_weights(fname)
-# p = model.predict([[2,3],[4,5],[1,3],[9,6],[8,9],[8,6],[7,4]])
-# for x in p:
-#     print(np.argmax(x))
+# model.fit(data,labels,epochs=20000,batch_size=700)
+# model.save_weights(fname,overwrite=True)
+
+
+
+# for x in range(0,20):
+#     print(d[x],l[x])
+
+
+for x in range(0,10):
+    print(data[x],labels[x])
+model.load_weights(fname)
+p = model.predict([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10]])
+for y in range(0,len(p)):
+    if p[y][0] > p[y][1] and p[y][0] > p[y][2]:
+        print("[1,0,0]")
+    elif p[y][1] > p[y][0] and p[y][1] > p[y][2]:
+        print("[0,1,0]")
+    elif p[y][2] > p[y][1] and p[y][2] > p[y][0]:
+        print("[0,0,1]")
+    else:
+        print("wrong")
+
 

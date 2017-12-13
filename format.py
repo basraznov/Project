@@ -48,6 +48,7 @@ def Normaliz(data,avg):
 	newdata = []
 	for x in range(0,len(data)):
 		newdata.append(data[x]/(avg+data[x]))
+	newdata = flaot2deciamal(newdata)
 	return newdata
 
 def AVG(data):
