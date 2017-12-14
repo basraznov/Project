@@ -148,8 +148,6 @@ print()
 #     l.append(labels[x])
 #     d.append(data[x])
 
-with open('filename.txt', 'a') as out:
-    out.write(str(labels))
 
 # model.fit(data,labels,epochs=20000,batch_size=700)
 # model.save_weights(fname,overwrite=True)
@@ -160,18 +158,19 @@ with open('filename.txt', 'a') as out:
 #     print(d[x],l[x])
 
 
-# for x in range(0,10):
-#     print(data[x],labels[x])
-# model.load_weights(fname)
-# p = model.predict([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10]])
-# for y in range(0,len(p)):
-#     if p[y][0] > p[y][1] and p[y][0] > p[y][2]:
-#         print("[1,0,0]")
-#     elif p[y][1] > p[y][0] and p[y][1] > p[y][2]:
-#         print("[0,1,0]")
-#     elif p[y][2] > p[y][1] and p[y][2] > p[y][0]:
-#         print("[0,0,1]")
-#     else:
-#         print("wrong")
+for x in range(0,10):
+    print(data[x],labels[x])
+model.load_weights(fname)
+p = model.predict([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10]])
+print(p)
+for y in range(0,len(p)):
+    if p[y][0] > p[y][1] and p[y][0] > p[y][2]:
+        print("[1,0,0]")
+    elif p[y][1] > p[y][0] and p[y][1] > p[y][2]:
+        print("[0,1,0]")
+    elif p[y][2] > p[y][1] and p[y][2] > p[y][0]:
+        print("[0,0,1]")
+    else:
+        print("wrong")
 
 
