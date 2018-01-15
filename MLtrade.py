@@ -117,7 +117,7 @@ data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
 
-stop = 0
+stop = 5
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
     sys.stdout.flush()
@@ -133,20 +133,20 @@ for x in range(start+1,stop):
         print("Error in "+str(x)+" symbol is "+symbol[x])
         traceback.print_exc()
         exit()
-print()
+# print()
 # k = 0
 # for x in range(0,len(data)-1):
 #     if data[x][4] == answer[x]:
 #         k+=1
 # print(k,len(data))
 
-# for x in range(0,len(data)):
-#     print(data[x],labels[x])
-# d = []
-# l =[]
-# for x in range(0,20):
-#     l.append(labels[x])
-#     d.append(data[x])
+for x in range(0,len(data)):
+    print(data[x],labels[x])
+d = []
+l =[]
+for x in range(0,20):
+    l.append(labels[x])
+    d.append(data[x])
 
 
 # model.fit(data,labels,epochs=20000,batch_size=700)
@@ -154,8 +154,8 @@ print()
 
 
 
-# for x in range(0,20):
-#     print(d[x],l[x])
+for x in range(0,20):
+    print(d[x],l[x])
 
 
 # for x in range(0,10):
