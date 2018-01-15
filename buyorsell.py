@@ -16,13 +16,20 @@
 import pymysql
 from format import *
 
+def r(num,per):
+	return [num-(num*5/100),num+(num*5/100)]
 
+def between(short,long,number):
+	if(number >= short and number <= long):
+		return True
+	else:
+		return False
 
 def buy(pLast,nLast,macd,rsi,avgVol,vol):
-	# print(pLast,nLast,macd,rsi,avgVol,vol)
 	if(pLast == None or nLast == None or macd == None or rsi == None or avgVol == None or vol == None):
 		return None
-	if(nLast >= pLast):
+	r = pLast
+	if(between(r[0],r[1],nLast) or nLast >= pLast):
 		if(vol > avgVol):
 			if(rsi > 30 and rsi < 70):
 				return	True
