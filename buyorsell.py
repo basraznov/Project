@@ -28,18 +28,20 @@ def between(short,long,number):
 def buy(pLast,nLast,macd,rsi,avgVol,vol):
 	if(pLast == None or nLast == None or macd == None or rsi == None or avgVol == None or vol == None):
 		return None
-	r = findRange(pLast,5)
-	if(between(r[0],r[1],nLast) or nLast >= pLast):
-		if(vol > avgVol):
-			if(rsi > 30 and rsi < 70):
+	rV = findRange(avgVol,15)
+	if(nLast >= pLast):
+		if(vol > rV[1]):
+			if(rsi <= 65):
 				return	True
 	return False
 
 def sell(pLast,nLast,avgVol,vol,ema):
 	if(pLast == None or nLast == None or avgVol == None or vol == None or ema == None):
 		return None
+	rV = findRange(avgVol,15)
+	rE = findRange(ema,10)
 	if(nLast < pLast):
-		if(vol > avgVol):
+		if(vol > rV[1]):
 			return True
 		if(nLast < ema):
 			return True

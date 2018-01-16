@@ -103,11 +103,10 @@ def tranfromAnswer(answer):
 
 # model = Sequential()
 # model.add(Dense(5, activation='sigmoid', input_dim=5))
-# # model.add(Dense(20, activation='sigmoid'))
 # model.add(Dense(60, activation='sigmoid'))
 # model.add(Dense(3, activation='softmax'))
 # model.compile(optimizer='rmsprop',
-#               loss='binary_crossentropy',
+#               loss='binary_crossentropy'     ,
 #               metrics=['accuracy'])
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
@@ -117,7 +116,7 @@ data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
 
-stop = 5
+stop = 10
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
     sys.stdout.flush()
@@ -134,14 +133,16 @@ for x in range(start+1,stop):
         traceback.print_exc()
         exit()
 # print()
-# k = 0
-# for x in range(0,len(data)-1):
-#     if data[x][4] == answer[x]:
-#         k+=1
-# print(k,len(data))
+k = 0
+for x in range(0,len(data)-1):
+    # print(data[x][4]*100,answer[x])
+    if (data[x][4])*100 == answer[x]:
+        k+=1
+print()
+print(k,len(data))
 
-for x in range(0,len(data)):
-    print(data[x],labels[x])
+
+
 d = []
 l =[]
 for x in range(0,20):
@@ -154,8 +155,8 @@ for x in range(0,20):
 
 
 
-for x in range(0,20):
-    print(d[x],l[x])
+# for x in range(0,20):
+#     print(d[x],l[x])
 
 
 # for x in range(0,10):
@@ -174,3 +175,4 @@ for x in range(0,20):
 #         print("wrong")
 
 
+# for x in range(0,len())
