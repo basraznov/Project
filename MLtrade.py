@@ -20,7 +20,7 @@ def diminput(Symblo):
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVG(Vol)
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
-    EMA5 = indi.EMA(data=Last,day=5)
+    EMA5 = indi.EMA(data=Last,day=30)
     answer = []
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
@@ -38,10 +38,12 @@ def diminput(Symblo):
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
-            Elogic.append(0)
+            Elogic.append(1)
         elif buy == True and sell == False:
             Elogic.append(1)
         elif buy == False and sell == True:
+            Elogic.append(-1)
+        elif buy == True and sell == True:
             Elogic.append(-1)
         else:
             Elogic.append(9)
@@ -116,7 +118,7 @@ data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
 
-stop = 10
+stop = 200
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
     sys.stdout.flush()
@@ -136,6 +138,8 @@ for x in range(start+1,stop):
 k = 0
 for x in range(0,len(data)-1):
     # print(data[x][4]*100,answer[x])
+    if (data[x][4]*100 == 9):
+        print("asdasd")
     if (data[x][4])*100 == answer[x]:
         k+=1
 print()
