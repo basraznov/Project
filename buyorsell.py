@@ -31,21 +31,18 @@ def buy(pLast,nLast,macd,rsi,avgVol,vol):
 	rL = findRange(pLast,10)
 	rV = findRange(avgVol,15)
 	if(nLast >= rL[0]):
-		if(vol > rV[1]):
-			if(rsi <= 65):
-				return	True
+		if(vol > rV[1] and rsi < 50 and macd > 0):
+			return	True
 	return False
 
-def sell(pLast,nLast,avgVol,vol,ema):
-	if(pLast == None or nLast == None or avgVol == None or vol == None or ema == None):
+def sell(pLast,nLast,avgVol,vol,ema,macd):
+	if(pLast == None or nLast == None or avgVol == None or vol == None or ema == None or macd == None):
 		return None
 	rL = findRange(pLast,10)
 	rV = findRange(avgVol,15)
 	rE = findRange(ema,10)
 	if(nLast < rL[1]):
-		if(vol > rV[1]):
-			return True
-		if(nLast < rE[1]):
+		if(vol > rV[1]  and nLast < rE[1] and macd < 0):
 			return True
 	return False
 

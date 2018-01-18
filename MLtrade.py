@@ -8,8 +8,21 @@ import sys
 import traceback
 
 fname = "Save.hdf5"
+a = 0
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
 
 def diminput(Symblo):
+    global a
+    global b
+    global c
+    global d
+    global e
+    global f
+
     stock = gf.getData(Symblo)
     if len(stock) < 60:
         return None,None
@@ -20,33 +33,42 @@ def diminput(Symblo):
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVG(Vol)
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
-    EMA5 = indi.EMA(data=Last,day=30)
+    EMA5 = indi.EMA(data=Last,day=5)
     answer = []
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
-        if Last[x] > Last[x+1]:
+        rL = bs.findRange(Last[x+1],2)
+        if Last[x] > rL[1]:
             answer.append(-1)
-        elif Last[x] < Last[x+1]:
+        elif Last[x] < rL[0]:
             answer.append(1)
         else:
             answer.append(0)
     answer.append(None)
     Elogic = [None]
-    for x in range(1,len(Last)):
-        buy = bs.buy(pLast=Last[x-1],nLast=Last[x],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x])
-        sell = bs.sell(pLast=Last[x-1],nLast=Last[x],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x])
+    for x in range(0,len(Last)-1):
+        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x])
+        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],macd=MACD[x])
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
-            Elogic.append(1)
+            a += 1
+            Elogic.append(0)
         elif buy == True and sell == False:
+            b += 1
             Elogic.append(1)
         elif buy == False and sell == True:
+            c += 1
             Elogic.append(-1)
         elif buy == True and sell == True:
-            Elogic.append(-1)
+            d += 1
+            Elogic.append(0)
         else:
             Elogic.append(9)
+        if buy == True:
+            e += 1
+        if sell == True:
+            f += 1
     dim = []
     temp = []
     for x in range(0,len(Chper)):
@@ -64,7 +86,7 @@ def diminput(Symblo):
 
     for x in range(0,len(Elogic)):
         if(Elogic[x] == None):
-            Elogic[x] = 0
+            Elogic[x] = 1
         Elogic[x] = Elogic[x]/100
     Elogic = gf.flaot2deciamal(Elogic)
 
@@ -112,13 +134,13 @@ def tranfromAnswer(answer):
 #               metrics=['accuracy'])
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
-start = 0
+start = 500
 symbol = gf.allSymbol()
 data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
 
-stop = 200
+stop = 520
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
     sys.stdout.flush()
@@ -136,14 +158,23 @@ for x in range(start+1,stop):
         exit()
 # print()
 k = 0
+j = 0
+l = 0
+m = 0
 for x in range(0,len(data)-1):
-    # print(data[x][4]*100,answer[x])
-    if (data[x][4]*100 == 9):
-        print("asdasd")
     if (data[x][4])*100 == answer[x]:
         k+=1
+    if answer[x] == 1:
+        l+=1
+    if answer[x] == 0:
+        j+=1
+    if answer[x] == -1:
+        m+=1
 print()
-print(k,len(data))
+print(k,len(data),k/len(data))
+print(l,j,m)
+print(a,b,c,d)
+print(e,f)
 
 
 
