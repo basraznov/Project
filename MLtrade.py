@@ -104,8 +104,8 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    for x in range(0,len(dim)):
-        print(x,dim[x],answer[x])
+    # for x in range(0,len(dim)):
+    #     print(x,dim[x],answer[x])
     return dim,answer
 
 
@@ -142,7 +142,7 @@ labels = tranfromAnswer(answer)
 SRAnswer = answer
 stop = 600
 for x in range(start+1,stop):
-    sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
+    sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
     sys.stdout.flush()
     try:
         dataT,answerT = diminput(symbol[x])
