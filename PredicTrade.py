@@ -1,4 +1,3 @@
-import numpy as np
 import indicator as indi
 import format as gf
 import buyorsell as bs
@@ -19,7 +18,7 @@ def diminput(Symblo):
     global d
     global e
     global f
-
+    
     stock = gf.getData(Symblo)
     if len(stock) < 60:
         return None,None
@@ -68,6 +67,7 @@ def diminput(Symblo):
             f += 1
     dim = []
     temp = []
+    k = 0
     for x in range(0,len(Chper)):
         if(Chper[x] == None):
             Chper[x] = 0
@@ -89,6 +89,7 @@ def diminput(Symblo):
 
     for x in range(0,len(Last)):
         if(RSI[x] == None or NomalZ[x] == None or MACD[x] == None or Elogic[x] == None):
+            l=+1
             continue
         temp.append(Chper[x])
         temp.append(RSI[x])
@@ -121,12 +122,12 @@ def tranfromAnswer(answer):
     return tmp
 
 th = 350
-start = 230
+start = th
 symbol = gf.allSymbol()
 data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
-stop = 600
+stop = th
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
     sys.stdout.flush()

@@ -104,8 +104,8 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    # for x in range(0,len(dim)):
-    #     print(x,dim[x],answer[x])
+    for x in range(0,len(dim)):
+        print(x,dim[x],answer[x])
     return dim,answer
 
 

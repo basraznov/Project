@@ -68,3 +68,12 @@ def allSymbol():
 	results = [str(i) for i in results]
 	results = [re.sub(",|\'|\(|\)", '', x) for x in results]
 	return results
+
+def getDate(Symbol):
+	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+	sql = "SELECT date FROM `trade` WHERE Symbol = %s"
+	data=[Symbol]
+	cursor = db.cursor()
+	cursor.execute(sql,data)
+	results = cursor.fetchall()
+	return results
