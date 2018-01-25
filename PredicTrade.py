@@ -30,16 +30,17 @@ def diminput(Symblo):
     AvgVol = indi.AVG(Vol)
     NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
+    Date = gf.getDate(Symblo)
     answer = []
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
         rL = bs.findRange(Last[x+1],2)
         if Last[x] > rL[1]:
-            answer.append(-1)
+            answer.append("Sell")
         elif Last[x] < rL[0]:
-            answer.append(1)
+            answer.append("Buy ")
         else:
-            answer.append(0)
+            answer.append("Hold")
     answer.append(None)
     Elogic = [None]
     for x in range(0,len(Last)-1):
@@ -49,18 +50,18 @@ def diminput(Symblo):
             Elogic.append(None)
         elif buy == False and sell == False:
             a += 1
-            Elogic.append(0)
+            Elogic.append("Hold")
         elif buy == True and sell == False:
             b += 1
-            Elogic.append(1)
+            Elogic.append("Buy ")
         elif buy == False and sell == True:
             c += 1
-            Elogic.append(-1)
+            Elogic.append("Sell")
         elif buy == True and sell == True:
             d += 1
-            Elogic.append(0)
+            Elogic.append("Hold")
         else:
-            Elogic.append(9)
+            Elogic.append("Error")
         if buy == True:
             e += 1
         if sell == True:
@@ -81,16 +82,11 @@ def diminput(Symblo):
         RSI[x] = RSI[x]/1000
     RSI = gf.flaot2deciamal(RSI)
 
-    for x in range(0,len(Elogic)):
-        if(Elogic[x] == None):
-            Elogic[x] = 1
-        Elogic[x] = Elogic[x]/100
-    Elogic = gf.flaot2deciamal(Elogic)
-
     for x in range(0,len(Last)):
         if(RSI[x] == None or NomalZ[x] == None or MACD[x] == None or Elogic[x] == None):
             l=+1
             continue
+        temp.append(Date[x])
         temp.append(Chper[x])
         temp.append(RSI[x])
         temp.append(NomalZ[x])
@@ -102,6 +98,8 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
+    # for x in range(0,len(dim)):
+    #     print(x,dim[x])
     return dim,answer
 
 
@@ -121,15 +119,17 @@ def tranfromAnswer(answer):
             tmp.append([0,0,1])
     return tmp
 
-th = 350
-start = th
+
 symbol = gf.allSymbol()
+th = symbol.index("PTT")
+print(th)
+start = th
 data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
 stop = th
 for x in range(start+1,stop):
-    sys.stdout.write("Download progress: %.2f%%   \r" % (100*x/(stop-start)) )
+    sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
     sys.stdout.flush()
     try:
         dataT,answerT = diminput(symbol[x])
@@ -150,13 +150,13 @@ l = 0
 m = 0
 p = 1
 for x in range(0,len(data)-1):
-    if (data[x][4])*100 == answer[x]:
+    if (data[x][5]) == answer[x]:
         k+=1
-    if answer[x] == 1:
+    if answer[x] == "Buy ":
         l+=1
-    if answer[x] == 0:
+    if answer[x] == "Hold":
         j+=1
-    if answer[x] == -1:
+    if answer[x] == "Sell":
         m+=1
     p += 1
 print(k,len(data),k/len(data))
