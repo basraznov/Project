@@ -1,5 +1,3 @@
-from keras.models import Sequential
-from keras.layers import Dense, Activation
 import numpy as np
 import indicator as indi
 import format as gf
@@ -7,7 +5,6 @@ import buyorsell as bs
 import sys
 import traceback
 
-fname = "Save.hdf5"
 a = 0
 b = 0
 c = 0
@@ -104,8 +101,6 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    # for x in range(0,len(dim)):
-    #     print(x,dim[x],answer[x])
     return dim,answer
 
 
@@ -125,15 +120,6 @@ def tranfromAnswer(answer):
             tmp.append([0,0,1])
     return tmp
 
-# model = Sequential()
-# model.add(Dense(5, activation='sigmoid', input_dim=5))
-# model.add(Dense(60, activation='sigmoid'))
-# model.add(Dense(3, activation='softmax'))
-# model.compile(optimizer='rmsprop',
-#               loss='binary_crossentropy'     ,
-#               metrics=['accuracy'])
-
-# model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
 th = 350
 start = 230
 symbol = gf.allSymbol()
@@ -176,39 +162,3 @@ print(k,len(data),k/len(data))
 # print(l,j,m)
 # print(a,b,c,d)
 # print(e,f)
-
-
-
-d = []
-l = []
-for x in range(0,20):
-    l.append(labels[x])
-    d.append(data[x])
-
-
-# model.fit(data,labels,epochs=20000,batch_size=700)
-# model.save_weights(fname,overwrite=True)
-
-
-
-# for x in range(0,20):
-#     print(d[x],l[x])
-
-
-# for x in range(0,10):
-#     print(data[x],labels[x])
-# model.load_weights(fname)
-# p = model.predict([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10]])
-# print(p)
-# for y in range(0,len(p)):
-#     if p[y][0] > p[y][1] and p[y][0] > p[y][2]:
-#         print("[1,0,0]")
-#     elif p[y][1] > p[y][0] and p[y][1] > p[y][2]:
-#         print("[0,1,0]")
-#     elif p[y][2] > p[y][1] and p[y][2] > p[y][0]:
-#         print("[0,0,1]")
-#     else:
-#         print("wrong")
-
-
-# for x in range(0,len())
