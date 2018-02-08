@@ -34,7 +34,7 @@ def diminput(Symblo):
     answer = []
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
-        rL = bs.findRange(Last[x+1],2)
+        rL = bs.findRange(Last[x+1],0.5)
         if Last[x] > rL[1]:
             answer.append("Sell")
         elif Last[x] < rL[0]:
@@ -73,13 +73,13 @@ def diminput(Symblo):
         if(Chper[x] == None):
             Chper[x] = 0
         else:
-            Chper[x] = Chper[x]/10
+            Chper[x] = Chper[x]
     Chper = gf.flaot2deciamal(Chper)
 
     for x in range(0,len(RSI)):
         if(RSI[x] == None):
             RSI[x] = 0
-        RSI[x] = RSI[x]/1000
+        RSI[x] = RSI[x]
     RSI = gf.flaot2deciamal(RSI)
 
     for x in range(0,len(Last)):
@@ -98,8 +98,8 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    # for x in range(0,len(dim)):
-    #     print(x,dim[x])
+    for x in range(0,len(dim)):
+        print(x,dim[x])
     return dim,answer
 
 
@@ -121,7 +121,7 @@ def tranfromAnswer(answer):
 
 
 symbol = gf.allSymbol()
-th = symbol.index("PTT")
+th = symbol.index("TOP")
 print(th)
 start = th
 data,answer = diminput(symbol[start])
@@ -160,6 +160,8 @@ for x in range(0,len(data)-1):
         m+=1
     p += 1
 print(k,len(data),k/len(data))
-# print(l,j,m)
-# print(a,b,c,d)
-# print(e,f)
+print(l,j,m)
+print(a,b,c,d)
+print(e,f)
+#RSI เกิน ให้ดูวันก่อนหน้าถ้าน้อยกว่า ให้ซื้อ 
+#ขายเอาRIS เป็นหลัก ไม่เอา vol
