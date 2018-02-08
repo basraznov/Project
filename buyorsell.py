@@ -25,24 +25,24 @@ def between(short,long,number):
 	else:
 		return False
 
-def buy(pLast,nLast,macd,rsi,avgVol,vol):
-	if(pLast == None or nLast == None or macd == None or rsi == None or avgVol == None or vol == None):
+def buy(pLast,nLast,macd,avgVol,vol,prsi,nrsi):
+	if(pLast == None or nLast == None or macd == None or avgVol == None or vol == None or prsi == None or nrsi == None):
 		return None
 	rL = findRange(pLast,10)
 	rV = findRange(avgVol,15)
 	if(nLast >= rL[0]):
-		if(vol > rV[1] and rsi < 50 and macd > 0):
+		if(vol > rV[1] and prsi+1 < nrsi  and macd > 0):
 			return	True
 	return False
 
-def sell(pLast,nLast,avgVol,vol,ema,macd):
-	if(pLast == None or nLast == None or avgVol == None or vol == None or ema == None or macd == None):
+def sell(pLast,nLast,avgVol,vol,ema,macd,prsi,nrsi):
+	if(pLast == None or nLast == None or avgVol == None or vol == None or ema == None or macd == None or prsi == None or nrsi == None):
 		return None
 	rL = findRange(pLast,10)
 	rV = findRange(avgVol,15)
 	rE = findRange(ema,10)
 	if(nLast < rL[1]):
-		if(vol > rV[1]  and nLast < rE[1] and macd < 0):
+		if(nLast < rE[0] and macd < 0 and prsi+1> nrsi and vol > rV[0]):
 			return True
 	return False
 

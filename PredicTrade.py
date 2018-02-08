@@ -33,8 +33,11 @@ def diminput(Symblo):
     Date = gf.getDate(Symblo)
     answer = []
     Last = list(filter(lambda a: a != None, Last))
-    for x in range(0,len(Last)-1):
-        rL = bs.findRange(Last[x+1],0.5)
+    for x in range(0,len(Last)):
+        if x+1 == len(Last):
+            answer.append("wwww")
+            break
+        rL = bs.findRange(Last[x+1],1)
         if Last[x] > rL[1]:
             answer.append("Sell")
         elif Last[x] < rL[0]:
@@ -44,8 +47,8 @@ def diminput(Symblo):
     answer.append(None)
     Elogic = [None]
     for x in range(0,len(Last)-1):
-        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x])
-        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],macd=MACD[x])
+        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol,vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
+        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],macd=MACD[x],nrsi=RSI[x+1],prsi=RSI[x])
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
@@ -69,12 +72,12 @@ def diminput(Symblo):
     dim = []
     temp = []
     k = 0
-    for x in range(0,len(Chper)):
-        if(Chper[x] == None):
-            Chper[x] = 0
+    for x in range(0,len(Last)):
+        if(Last[x] == None):
+            Last[x] = 0
         else:
-            Chper[x] = Chper[x]
-    Chper = gf.flaot2deciamal(Chper)
+            Last[x] = Last[x]
+    Last = gf.flaot2deciamal(Last)
 
     for x in range(0,len(RSI)):
         if(RSI[x] == None):
@@ -87,7 +90,7 @@ def diminput(Symblo):
             l=+1
             continue
         temp.append(Date[x])
-        temp.append(Chper[x])
+        temp.append(Last[x])
         temp.append(RSI[x])
         temp.append(NomalZ[x])
         temp.append(MACD[x])
@@ -149,7 +152,7 @@ j = 0
 l = 0
 m = 0
 p = 1
-for x in range(0,len(data)-1):
+for x in range(0,len(data)):
     if (data[x][5]) == answer[x]:
         k+=1
     if answer[x] == "Buy ":
