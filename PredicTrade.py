@@ -124,7 +124,7 @@ def tranfromAnswer(answer):
 
 
 symbol = gf.allSymbol()
-th = symbol.index("TOP")
+th = symbol.index("SCB")
 print(th)
 start = th
 data,answer = diminput(symbol[start])
