@@ -101,9 +101,25 @@ def AVG(data):
 	avg = sum/len(data)
 	return avg
 
+def AVGN(day,data):
+	data = list(data)
+	temp = 0.0
+	avgn=[]
+	for x in range(0,day-1):
+		avgn.append(None)
+	for x in range(day,len(data)+1):
+		for y in range(x-day,x):
+			temp += data[y]
+		avgn.append(temp/day)
+		# print(temp)
+		temp = 0.0
+	return avgn
 
 
-
+# data = [10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,10,10]
+# print(len(data))
+# print(AVGN(day = 10,data = data))
+# print(len(AVGN(day = 10,data = data)))
 # data = getData("CGS")
 # data = getVol(data)
 # avgVol = AVG(data)

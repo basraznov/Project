@@ -48,7 +48,7 @@ def diminput(Symblo):
     Elogic = [None]
     for x in range(0,len(Last)-1):
         buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol,vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
-        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],macd=MACD[x],nrsi=RSI[x+1],prsi=RSI[x])
+        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],pmacd=MACD[x],nmacd=MACD[x+1],nrsi=RSI[x+1],prsi=RSI[x])
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
@@ -124,7 +124,7 @@ def tranfromAnswer(answer):
 
 
 symbol = gf.allSymbol()
-th = symbol.index("SCB")
+th = symbol.index("PTT")
 print(th)
 start = th
 data,answer = diminput(symbol[start])
@@ -146,7 +146,7 @@ for x in range(start+1,stop):
         print("Error in "+str(x)+" symbol is "+symbol[x])
         traceback.print_exc()
         exit()
-print()
+print() 
 k = 0
 j = 0
 l = 0

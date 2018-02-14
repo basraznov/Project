@@ -47,8 +47,8 @@ def diminput(Symblo):
     answer.append(None)
     Elogic = [None]
     for x in range(0,len(Last)-1):
-        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],rsi=RSI[x],avgVol=AvgVol,vol=Vol[x])
-        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],macd=MACD[x])
+        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol,vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
+        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],pmacd=MACD[x],nmacd=MACD[x+1],nrsi=RSI[x+1],prsi=RSI[x])
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
@@ -125,22 +125,22 @@ def tranfromAnswer(answer):
             tmp.append([0,0,1])
     return tmp
 
-# model = Sequential()
-# model.add(Dense(5, activation='sigmoid', input_dim=5))
-# model.add(Dense(60, activation='sigmoid'))
-# model.add(Dense(3, activation='softmax'))
-# model.compile(optimizer='rmsprop',
-#               loss='binary_crossentropy'     ,
-#               metrics=['accuracy'])
+model = Sequential()
+model.add(Dense(5, activation='relu', input_dim=5))
+model.add(Dense(60, activation='relu'))
+model.add(Dense(3, activation='softmax'))
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy'     ,
+              metrics=['accuracy'])
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
 th = 350
-start = 230
+start = 100
 symbol = gf.allSymbol()
 data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)
 SRAnswer = answer
-stop = 600
+stop = 200
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
     sys.stdout.flush()
@@ -186,7 +186,7 @@ for x in range(0,20):
     d.append(data[x])
 
 
-# model.fit(data,labels,epochs=20000,batch_size=700)
+model.fit(data,labels,epochs=20000,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
 
