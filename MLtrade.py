@@ -135,7 +135,7 @@ model.compile(optimizer='rmsprop',
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
 th = 350
-start = 100
+start = 200
 symbol = gf.allSymbol()
 data,answer = diminput(symbol[start])
 labels = tranfromAnswer(answer)

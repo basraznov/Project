@@ -27,8 +27,7 @@ def diminput(Symblo):
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
     RSI = indi.RSI(data=Last,day=14)
-    AvgVol = indi.AVG(Vol)
-    NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
+    AvgVol = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
     Date = gf.getDate(Symblo)
     answer = []
@@ -47,8 +46,8 @@ def diminput(Symblo):
     answer.append(None)
     Elogic = [None]
     for x in range(0,len(Last)-1):
-        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol,vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
-        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],pmacd=MACD[x],nmacd=MACD[x+1],nrsi=RSI[x+1],prsi=RSI[x])
+        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol[x],vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
+        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol[x],vol=Vol[x],ema=EMA5[x],pmacd=MACD[x],nmacd=MACD[x+1],nrsi=RSI[x+1],prsi=RSI[x])
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
@@ -86,13 +85,13 @@ def diminput(Symblo):
     RSI = gf.flaot2deciamal(RSI)
 
     for x in range(0,len(Last)):
-        if(RSI[x] == None or NomalZ[x] == None or MACD[x] == None or Elogic[x] == None):
+        if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None):
             l=+1
             continue
         temp.append(Date[x])
         temp.append(Last[x])
         temp.append(RSI[x])
-        temp.append(NomalZ[x])
+        temp.append(AvgVol[x])
         temp.append(MACD[x])
         temp.append(Elogic[x])
         dim.append(temp)

@@ -46,7 +46,6 @@ def RSI(day,data):
 	GL = flaot2deciamal(GL)
 	G = []
 	L = []
-	# print(GL)
 	for x in GL:
 		if x >= 0:
 			G.append(x)
@@ -111,7 +110,6 @@ def AVGN(day,data):
 		for y in range(x-day,x):
 			temp += data[y]
 		avgn.append(temp/day)
-		# print(temp)
 		temp = 0.0
 	return avgn
 
