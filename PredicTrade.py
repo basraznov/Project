@@ -18,7 +18,7 @@ def diminput(Symblo):
     global d
     global e
     global f
-    
+    o = 0
     stock = gf.getData(Symblo)
     if len(stock) < 60:
         return None,None
@@ -95,13 +95,14 @@ def diminput(Symblo):
         temp.append(MACD[x])
         temp.append(Elogic[x])
         dim.append(temp)
+        print(temp)
         temp = []
+
+        o+=1
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
     answer.pop()
-    dim.pop()
-    for x in range(0,len(dim)):
-        print(x,dim[x])
+    # dim.pop() # for ML only
     return dim,answer
 
 
@@ -152,6 +153,8 @@ l = 0
 m = 0
 p = 1
 for x in range(0,len(data)):
+    if (x >= len(answer)):
+        break
     if (data[x][5]) == answer[x]:
         k+=1
     if answer[x] == "Buy ":
