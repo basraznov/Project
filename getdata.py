@@ -128,9 +128,6 @@ def tosql(input):
     
 
 
-
-       
-
 stocks = GetdateFromWeb(url[int(sys.argv[1])-1])
 data = FormatData(stocks)
 ShowData(data)

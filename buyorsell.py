@@ -41,10 +41,8 @@ def sell(pLast,nLast,avgVol,vol,ema,pmacd,nmacd,prsi,nrsi):
 	rL = findRange(pLast,0.5)
 	rV = findRange(avgVol,15)
 	rE = findRange(ema,1)
-	if(nLast == 30.75 and nrsi == 47.09):
-		print(pLast,avgVol,rL,prsi)
 	if(nLast < rL[0]):
-		if(nrsi < prsi):#and vol > rV[0]):
+		if(nrsi < prsi and vol > rV[0]):
 			return True
 	return False
 

@@ -1,5 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense, Activation
+from keras import optimizers
+from keras import losses
 import numpy as np
 import indicator as indi
 import format as gf
@@ -27,28 +29,27 @@ def diminput(Symblo):
     if len(stock) < 60:
         return None,None
     Last = gf.getLast(stock)
+    AvgLast = indi.AVGN(data=Last,day=5)
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
     RSI = indi.RSI(data=Last,day=14)
-    AvgVol = indi.AVG(Vol)
-    NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
+    AvgVol = indi.AVGN(data=Vol,day=5)
+    # NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
     answer = []
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
         rL = bs.findRange(Last[x+1],2)
         if Last[x] > rL[1]:
-            answer.append(-1)
-        elif Last[x] < rL[0]:
             answer.append(1)
         else:
             answer.append(0)
     answer.append(None)
     Elogic = [None]
     for x in range(0,len(Last)-1):
-        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol,vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
-        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol,vol=Vol[x],ema=EMA5[x],pmacd=MACD[x],nmacd=MACD[x+1],nrsi=RSI[x+1],prsi=RSI[x])
+        buy = bs.buy(pLast=Last[x],nLast=Last[x+1],macd=MACD[x],avgVol=AvgVol[x],vol=Vol[x],nrsi=RSI[x+1],prsi=RSI[x])
+        sell = bs.sell(pLast=Last[x],nLast=Last[x+1],avgVol=AvgVol[x],vol=Vol[x],ema=EMA5[x],pmacd=MACD[x],nmacd=MACD[x+1],nrsi=RSI[x+1],prsi=RSI[x])
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
@@ -59,7 +60,7 @@ def diminput(Symblo):
             Elogic.append(1)
         elif buy == False and sell == True:
             c += 1
-            Elogic.append(-1)
+            Elogic.append(0)
         elif buy == True and sell == True:
             d += 1
             Elogic.append(0)
@@ -84,26 +85,49 @@ def diminput(Symblo):
         RSI[x] = RSI[x]/1000
     RSI = gf.flaot2deciamal(RSI)
 
-    for x in range(0,len(Elogic)):
-        if(Elogic[x] == None):
-            Elogic[x] = 1
-        Elogic[x] = Elogic[x]/100
-    Elogic = gf.flaot2deciamal(Elogic)
+    for x in range(0,len(Last)):
+        if(Last[x] == None):
+            Last[x] = 0
+        Last[x] = Last[x]/1000
+        Last[x] = Last[x]/(Last[x]+Last[x]/2)
+    Last = gf.flaot2deciamal(Last)
+
+    # for x in range(0,len(Elogic)):
+    #     if(Elogic[x] == None):
+    #         Elogic[x] = 0.1
+    #     Elogic[x] = Elogic[x]/100
+    # Elogic = gf.flaot2deciamal(Elogic)
+
+    for x in range(0,len(AvgVol)):
+        if(AvgVol[x] == None):
+            AvgVol[x] = 0.1
+        AvgVol[x] = AvgVol[x]/(AvgVol[x]+AvgVol[x]/2)
+    AvgVol = gf.flaot2deciamal(AvgVol)
+
+    for x in range(0,len(AvgLast)):
+        if(AvgLast[x] == None):
+            AvgLast[x] = 0.1
+    AvgLast = gf.flaot2deciamal(AvgLast)
 
     for x in range(0,len(Last)):
-        if(RSI[x] == None or NomalZ[x] == None or MACD[x] == None or Elogic[x] == None):
+        if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
+        temp.append(Last[x])
         temp.append(RSI[x])
-        temp.append(NomalZ[x])
+        temp.append(AvgVol[x])
         temp.append(MACD[x])
+        temp.append(AvgLast[x])
         temp.append(Elogic[x])
         dim.append(temp)
+        # print(temp)
         temp = []
+
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
     answer.pop()
     dim.pop()
+    # print(len(answer),len(dim))
     # for x in range(0,len(dim)):
     #     print(x,dim[x],answer[x])
     return dim,answer
@@ -126,21 +150,25 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(5, activation='relu', input_dim=5))
-model.add(Dense(60, activation='relu'))
-model.add(Dense(3, activation='softmax'))
-model.compile(optimizer='rmsprop',
-              loss='binary_crossentropy'     ,
+model.add(Dense(7, activation='relu', input_dim=7))
+model.add(Dense(200, activation='softmax'))
+model.add(Dense(200, activation='softmax'))
+model.add(Dense(1,activation = 'sigmoid'))
+optimizer = optimizers.SGD(lr=0.02, momentum=0.0, decay=0.0, nesterov=False)
+model.compile(optimizer=optimizer,
+              loss='mean_squared_error',
               metrics=['accuracy'])
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
-th = 350
-start = 200
+th = 600
+start = 300
 symbol = gf.allSymbol()
 data,answer = diminput(symbol[start])
-labels = tranfromAnswer(answer)
+labels = answer
 SRAnswer = answer
-stop = 200
+# print("\n",len(labels),len(data))
+stop = 350
+# print(answer)
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
     sys.stdout.flush()
@@ -148,10 +176,14 @@ for x in range(start+1,stop):
         dataT,answerT = diminput(symbol[x])
         if dataT == None or answerT == None:
             continue
-        labelsT =  tranfromAnswer(answerT)
+        labelsT =  answerT
+        # print("\n")
         data = connector(data,dataT)
+        # print(len(labels),len(labelsT),"B")
         labels = connector(labels,labelsT)
-        SRAnswer = connector(SRAnswer,answerT)
+        # print(len(labels),len(labelsT),"A")
+        # SRAnswer = connector(SRAnswer,answerT)
+        # print("\n",len(data),len(labels)," 321321321321 ")
     except Exception as e:
         print("Error in "+str(x)+" symbol is "+symbol[x])
         traceback.print_exc()
@@ -162,6 +194,7 @@ j = 0
 l = 0
 m = 0
 p = 1
+# print(len(data),len(labels),"asasdasd")
 for x in range(0,len(data)-1):
     if (data[x][4])*100 == answer[x]:
         k+=1
@@ -186,29 +219,30 @@ for x in range(0,20):
     d.append(data[x])
 
 
-model.fit(data,labels,epochs=20000,batch_size=700)
+model.fit(data,labels,epochs=200,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
 
 
 # for x in range(0,20):
 #     print(d[x],l[x])
+k1 = 400
+k2 = 420
 
-
-# for x in range(0,10):
-#     print(data[x],labels[x])
+for x in range(k1,k2):
+    print(data[x],labels[x])
 # model.load_weights(fname)
-# p = model.predict([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10]])
-# print(p)
-# for y in range(0,len(p)):
-#     if p[y][0] > p[y][1] and p[y][0] > p[y][2]:
-#         print("[1,0,0]")
-#     elif p[y][1] > p[y][0] and p[y][1] > p[y][2]:
-#         print("[0,1,0]")
-#     elif p[y][2] > p[y][1] and p[y][2] > p[y][0]:
-#         print("[0,0,1]")
-#     else:
-#         print("wrong")
+
+
+
+k = [data[x] for x in range(k1,k2)]
+p = model.predict(k)
+print(p)
+for y in range(0,len(p)):
+    if p[y] > 0.5:
+        print("Interest")
+    else:
+        print("Nope")
 
 
 # for x in range(0,len())
