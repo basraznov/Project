@@ -103,6 +103,7 @@ def addNewCompany(symbol):
         return False
 
 def tosql(input):
+    print("Adding to SQL ........")
     input = list(input)
     name = []
     mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
@@ -119,7 +120,7 @@ def tosql(input):
         cursor.execute(sql,data)
         mydb.commit()
     cursor.close()
-    print ("############################# Done ##############################")
+    print ("\n\n\n\n\n############################# Done ##############################\n\n\n\n\n")
     if name:
         return name
     else:
@@ -127,34 +128,34 @@ def tosql(input):
     
     
 
-
-stocks = GetdateFromWeb(url[int(sys.argv[1])-1])
-data = FormatData(stocks)
-ShowData(data)
-name = None
-while True:
-    print("Press Y for add data into database or N to exit",end=" ")
-    a = input()
-    if a == 'y' or a=='Y':
-        name = tosql(data)
-        break
-    if a == 'n' or a =='N':
-        break
-
-if name != None:
-    print("Found New Symble Press Y to auto add company or N to exit",end=" ")
-    a = input()
+for x in url:
+    stocks = GetdateFromWeb(x)
+    data = FormatData(stocks)
+    ShowData(data)
+    name = None
     while True:
+        print("Press Y for add data into database or N to exit",end=" ")
+        a = input()
         if a == 'y' or a=='Y':
-            for x in name:
-                print ("All Symbol : ",name)
-                print ("Adding new Symbol [",x,"]")
-                if addNewCompany(x):
-                    print ("Adding Symbol [",x,"] success")
-                else:
-                    print ("Addin Symbol [",x,"] Fail")
+            name = tosql(data)
             break
         if a == 'n' or a =='N':
             break
+
+    if name != None:
+        print("Found New Symble Press Y to auto add company or N to exit",end=" ")
+        a = input()
+        while True:
+            if a == 'y' or a=='Y':
+                for x in name:
+                    print ("All Symbol : ",name)
+                    print ("Adding new Symbol [",x,"]")
+                    if addNewCompany(x):
+                        print ("Adding Symbol [",x,"] success")
+                    else:
+                        print ("Addin Symbol [",x,"] Fail")
+                break
+            if a == 'n' or a =='N':
+                break
 
         
