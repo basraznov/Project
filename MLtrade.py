@@ -30,11 +30,13 @@ def diminput(Symblo):
         return None,None
     Last = gf.getLast(stock)
     AvgLast = indi.AVGN(data=Last,day=5)
+    AvgLast10 = indi.AVGN(data=Last,day=10)
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVGN(data=Vol,day=5)
+    AvgVol10 = indi.AVGN(data=Vol,day=10)
     # NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
     answer = []
@@ -85,11 +87,22 @@ def diminput(Symblo):
         RSI[x] = RSI[x]/1000
     RSI = gf.flaot2deciamal(RSI)
 
+    for x in range(0,len(AvgLast10)):
+        if(AvgLast10[x] == None):
+            AvgLast10[x] = 0.01
+    AvgLast10 = gf.flaot2deciamal(AvgLast10)
+    
+    for x in range(0,len(AvgLast)):
+        if(AvgLast[x] == None):
+            AvgLast[x] = 0.01
+        AvgLast[x] = AvgLast[x]/((AvgLast10[x]+AvgLast[x]))
+    AvgLast = gf.flaot2deciamal(AvgLast)
+
     for x in range(0,len(Last)):
         if(Last[x] == None):
             Last[x] = 0
         Last[x] = Last[x]/1000
-        Last[x] = Last[x]/(Last[x]+Last[x]/2)
+        Last[x] = Last[x]/(1+Last[x])*10
     Last = gf.flaot2deciamal(Last)
 
     # for x in range(0,len(Elogic)):
@@ -97,17 +110,16 @@ def diminput(Symblo):
     #         Elogic[x] = 0.1
     #     Elogic[x] = Elogic[x]/100
     # Elogic = gf.flaot2deciamal(Elogic)
+    for x in range(0,len(AvgVol10)):
+        if(AvgVol10[x] == None):
+            AvgVol10[x] = 10000
+    AvgVol10 = gf.flaot2deciamal(AvgVol10)
 
     for x in range(0,len(AvgVol)):
         if(AvgVol[x] == None):
-            AvgVol[x] = 0.1
-        AvgVol[x] = AvgVol[x]/(AvgVol[x]+AvgVol[x]/2)
+            AvgVol[x] = 10000
+        AvgVol[x] = AvgVol[x]/((AvgVol10[x]+AvgVol[x]))
     AvgVol = gf.flaot2deciamal(AvgVol)
-
-    for x in range(0,len(AvgLast)):
-        if(AvgLast[x] == None):
-            AvgLast[x] = 0.1
-    AvgLast = gf.flaot2deciamal(AvgLast)
 
     for x in range(0,len(Last)):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
@@ -118,7 +130,6 @@ def diminput(Symblo):
         temp.append(AvgVol[x])
         temp.append(MACD[x])
         temp.append(AvgLast[x])
-        temp.append(Elogic[x])
         dim.append(temp)
         # print(temp)
         temp = []
@@ -150,7 +161,7 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(7, activation='relu', input_dim=7))
+model.add(Dense(125, activation='relu', input_dim=6))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(1,activation = 'sigmoid'))
