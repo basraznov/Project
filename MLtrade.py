@@ -8,6 +8,7 @@ import format as gf
 import buyorsell as bs
 import sys
 import traceback
+import random
 
 fname = "Save.hdf5"
 a = 0
@@ -98,13 +99,6 @@ def diminput(Symblo):
         AvgLast[x] = AvgLast[x]/((AvgLast10[x]+AvgLast[x]))
     AvgLast = gf.flaot2deciamal(AvgLast)
 
-    for x in range(0,len(Last)):
-        if(Last[x] == None):
-            Last[x] = 0
-        Last[x] = Last[x]/1000
-        Last[x] = Last[x]/(1+Last[x])*10
-    Last = gf.flaot2deciamal(Last)
-
     # for x in range(0,len(Elogic)):
     #     if(Elogic[x] == None):
     #         Elogic[x] = 0.1
@@ -122,6 +116,13 @@ def diminput(Symblo):
     AvgVol = gf.flaot2deciamal(AvgVol)
 
     for x in range(0,len(Last)):
+        if(Last[x] == None):
+            Last[x] = 0
+        Last[x] = Last[x]/1000
+        Last[x] = Last[x]/(AvgLast10[x])
+    Last = gf.flaot2deciamal(Last)
+
+    for x in range(0,len(Last)):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
@@ -130,8 +131,8 @@ def diminput(Symblo):
         temp.append(AvgVol[x])
         temp.append(MACD[x])
         temp.append(AvgLast[x])
+        temp.append(Elogic[x])
         dim.append(temp)
-        # print(temp)
         temp = []
 
     for x in range(0,len(answer)-len(dim)):
@@ -140,7 +141,8 @@ def diminput(Symblo):
     dim.pop()
     # print(len(answer),len(dim))
     # for x in range(0,len(dim)):
-    #     print(x,dim[x],answer[x])
+    #     if answer[x] == 1: 
+    #         print(dim[x],answer[x])
     return dim,answer
 
 
@@ -161,7 +163,7 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(125, activation='relu', input_dim=6))
+model.add(Dense(125, activation='softmax', input_dim=7))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(1,activation = 'sigmoid'))
@@ -222,15 +224,39 @@ print(k,len(data),k/len(data))
 # print(e,f)
 
 
+cY = 0
+cN = 0
+mm = 0
+newdataY = []
+newanswerY = []
+newdataN = []
+newanswerN = []
+print(len(data),len(answer))
+for x in range(len(data)):
+    if answer[x] == 1:
+        cY += 1
+        newdataY.append(data[x])
+        newanswerY.append(answer[x])
+    else:
+        cN += 1
+        newdataN.append(data[x])
+        newanswerN.append(answer[x])
 
-d = []
-l = []
-for x in range(0,20):
-    l.append(labels[x])
-    d.append(data[x])
+while len(newanswerN) > len(newanswerY)*1.5:
+    k = random.randint(0, len(newanswerN)-1)
+    newanswerN.pop(k)
+    newdataN.pop(k)
+    mm += 1
 
+print(len(newdataY),len(newanswerY),cY)
+print(len(newdataN),len(newanswerN),mm)
 
-model.fit(data,labels,epochs=200,batch_size=700)
+for x in range(len(newanswerN)):
+    newdataY.append(newdataN[x])
+    newanswerY.append(newanswerN[x])
+
+model.fit(newdataN,newanswerN,epochs=10,batch_size=700)
+# model.fit(data,labels,epochs=200,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
 
@@ -240,8 +266,8 @@ model.fit(data,labels,epochs=200,batch_size=700)
 k1 = 400
 k2 = 420
 
-for x in range(k1,k2):
-    print(data[x],labels[x])
+# for x in range(k1,k2):
+#     print(data[x],labels[x])
 # model.load_weights(fname)
 
 
