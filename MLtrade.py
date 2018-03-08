@@ -35,6 +35,7 @@ def diminput(Symblo):
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
+    MACDAvg10 = indi.AVGN(data=MACD,day=10)
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVGN(data=Vol,day=5)
     AvgVol10 = indi.AVGN(data=Vol,day=10)
@@ -95,8 +96,11 @@ def diminput(Symblo):
     
     for x in range(0,len(AvgLast)):
         if(AvgLast[x] == None):
-            AvgLast[x] = 0.01
-        AvgLast[x] = AvgLast[x]/((AvgLast10[x]+AvgLast[x]))
+            AvgLast[x] = 0
+        if x != 0:
+            AvgLast[x] = AvgLast[x]/(AvgLast10[x-1])
+        else:
+            AvgLast[x] = 0
     AvgLast = gf.flaot2deciamal(AvgLast)
 
     # for x in range(0,len(Elogic)):
@@ -104,6 +108,7 @@ def diminput(Symblo):
     #         Elogic[x] = 0.1
     #     Elogic[x] = Elogic[x]/100
     # Elogic = gf.flaot2deciamal(Elogic)
+
     for x in range(0,len(AvgVol10)):
         if(AvgVol10[x] == None):
             AvgVol10[x] = 10000
@@ -111,23 +116,28 @@ def diminput(Symblo):
 
     for x in range(0,len(AvgVol)):
         if(AvgVol[x] == None):
-            AvgVol[x] = 10000
-        AvgVol[x] = AvgVol[x]/(AvgVol10[x])
+            AvgVol[x] = 0
+        if x != 0:
+            AvgVol[x] = AvgVol[x]/(AvgVol10[x-1])
+        else:
+            AvgVol[x] = 0
     AvgVol = gf.flaot2deciamal(AvgVol)
 
     for x in range(0,len(Last)):
         if(Last[x] == None):
             Last[x] = 0
-        Last[x] = Last[x]/1000
-        Last[x] = Last[x]/(AvgLast10[x])
+        if(x != 0):
+            Last[x] = (Last[x]-AvgLast10[x-1])/AvgLast10[x-1]
+        else:
+            Last[x] = 0
     Last = gf.flaot2deciamal(Last)
-    
+
 
     for x in range(0,len(Last)):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
-        temp.append(Last[x]) # แก้ #(ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
+        temp.append(Last[x]) #แก้ (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
         temp.append(RSI[x])
         temp.append(AvgVol[x]) #แก้ vol/volavg 10
         temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน
@@ -164,7 +174,7 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(125, activation='softmax', input_dim=7))
+model.add(Dense(125, activation='softmax', input_dim=6))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(1,activation = 'sigmoid'))
@@ -257,30 +267,43 @@ print(k,len(data),k/len(data))
 #     newanswerY.append(newanswerN[x])
 
 # model.fit(newdataN,newanswerN,epochs=10,batch_size=700)
-model.fit(data,labels,epochs=2000,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
+k1 = 400
+k2 = 420
+print ("----")
+data = np.array(data)
+xx = data[:len(data),:6].tolist()
+yy = data[:len(data),6:].tolist()
+model.fit(xx,yy,epochs=200,batch_size=700)
+aa = data[k1:k2,:6]
+p = model.predict(aa)
+print(p)
+for y in range(0,len(p)):
+    if p[y] > 0.3:
+        print("Interest")
+    else:
+        print("Nope")
 
 
 # for x in range(0,20):
 #     print(d[x],l[x])
-k1 = 400
-k2 = 420
+
 
 for x in range(k1,k2):
     print(data[x],labels[x])
 # model.load_weights(fname)
 
 
-
-k = [data[x] for x in range(k1,k2)]
-p = model.predict(k)
-print(p)
-for y in range(0,len(p)):
-    if p[y] > 0.5:
-        print("Interest")
-    else:
-        print("Nope")
+# model.fit(data,labels,epochs=200,batch_size=700)
+# k = [data[x] for x in range(k1,k2)]
+# p = model.predict(k)
+# print(p)
+# for y in range(0,len(p)):
+#     if p[y] > 0.3:
+#         print("Interest")
+#     else:
+#         print("Nope")
 
 
 # for x in range(0,len())

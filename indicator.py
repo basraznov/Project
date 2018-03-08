@@ -108,10 +108,14 @@ def AVGN(day,data):
 		avgn.append(None)
 	for x in range(day,len(data)+1):
 		for y in range(x-day,x):
+			if(data[y] == None):
+				avgn.append(None)
+				continue
 			temp += data[y]
 		avgn.append(temp/day)
 		temp = 0.0
 	return avgn
+
 
 
 # data = [10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,10,10]
