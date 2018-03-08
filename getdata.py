@@ -134,13 +134,15 @@ for x in url:
     ShowData(data)
     name = None
     while True:
-        print("Press Y for add data into database or N to exit",end=" ")
+        print("Press Y for add data into database, N to script or E to exit",end=" ")
         a = input()
-        if a == 'y' or a=='Y':
+        if a == 'y' or a == 'Y':
             name = tosql(data)
             break
-        if a == 'n' or a =='N':
+        if a == 'n' or a == 'N':
             break
+        if a == 'e' or a == 'E':
+            exit()
 
     if name != None:
         print("Found New Symble Press Y to auto add company or N to exit",end=" ")
