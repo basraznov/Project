@@ -45,7 +45,7 @@ def diminput(Symblo):
     for x in range(0,len(Last)-1):
         rL = bs.findRange(Last[x+1],2)
         if Last[x] > rL[1]:
-            answer.append(1)
+            answer.append(0.3)
         else:
             answer.append(0)
     answer.append(None)
@@ -85,7 +85,7 @@ def diminput(Symblo):
     for x in range(0,len(RSI)):
         if(RSI[x] == None):
             RSI[x] = 0
-        RSI[x] = RSI[x]/1000
+        RSI[x] = RSI[x]/100
     RSI = gf.flaot2deciamal(RSI)
 
     for x in range(0,len(AvgLast10)):
@@ -112,7 +112,7 @@ def diminput(Symblo):
     for x in range(0,len(AvgVol)):
         if(AvgVol[x] == None):
             AvgVol[x] = 10000
-        AvgVol[x] = AvgVol[x]/((AvgVol10[x]+AvgVol[x]))
+        AvgVol[x] = AvgVol[x]/(AvgVol10[x])
     AvgVol = gf.flaot2deciamal(AvgVol)
 
     for x in range(0,len(Last)):
@@ -121,28 +121,29 @@ def diminput(Symblo):
         Last[x] = Last[x]/1000
         Last[x] = Last[x]/(AvgLast10[x])
     Last = gf.flaot2deciamal(Last)
+    
 
     for x in range(0,len(Last)):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
-        temp.append(Last[x])
+        temp.append(Last[x]) # แก้ #(ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
         temp.append(RSI[x])
-        temp.append(AvgVol[x])
-        temp.append(MACD[x])
-        temp.append(AvgLast[x])
+        temp.append(AvgVol[x]) #แก้ vol/volavg 10
+        temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน
+        temp.append(AvgLast[x]) #ไม่ต้อง
         temp.append(Elogic[x])
         dim.append(temp)
+        # print(temp)
         temp = []
 
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    # print(len(answer),len(dim))
-    # for x in range(0,len(dim)):
-    #     if answer[x] == 1: 
-    #         print(dim[x],answer[x])
+    print(len(answer),len(dim))
+    for x in range(0,len(dim)): 
+        print(dim[x],answer[x])
     return dim,answer
 
 
@@ -176,11 +177,11 @@ model.compile(optimizer=optimizer,
 th = 600
 start = 300
 symbol = gf.allSymbol()
-data,answer = diminput(symbol[start])
+data,answer = diminput(symbol[th])
 labels = answer
 SRAnswer = answer
 # print("\n",len(labels),len(data))
-stop = 350
+stop = 300
 # print(answer)
 for x in range(start+1,stop):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
@@ -224,39 +225,39 @@ print(k,len(data),k/len(data))
 # print(e,f)
 
 
-cY = 0
-cN = 0
-mm = 0
-newdataY = []
-newanswerY = []
-newdataN = []
-newanswerN = []
-print(len(data),len(answer))
-for x in range(len(data)):
-    if answer[x] == 1:
-        cY += 1
-        newdataY.append(data[x])
-        newanswerY.append(answer[x])
-    else:
-        cN += 1
-        newdataN.append(data[x])
-        newanswerN.append(answer[x])
+# cY = 0
+# cN = 0
+# mm = 0
+# newdataY = []
+# newanswerY = []
+# newdataN = []
+# newanswerN = []
+# print(len(data),len(answer))
+# for x in range(len(data)):
+#     if answer[x] == 1:
+#         cY += 1
+#         newdataY.append(data[x])
+#         newanswerY.append(answer[x])
+#     else:
+#         cN += 1
+#         newdataN.append(data[x])
+#         newanswerN.append(answer[x])
 
-while len(newanswerN) > len(newanswerY)*1.5:
-    k = random.randint(0, len(newanswerN)-1)
-    newanswerN.pop(k)
-    newdataN.pop(k)
-    mm += 1
+# while len(newanswerN) > len(newanswerY)*1.5:
+#     k = random.randint(0, len(newanswerN)-1)
+#     newanswerN.pop(k)
+#     newdataN.pop(k)
+#     mm += 1
 
-print(len(newdataY),len(newanswerY),cY)
-print(len(newdataN),len(newanswerN),mm)
+# print(len(newdataY),len(newanswerY),cY)
+# print(len(newdataN),len(newanswerN),mm)
 
-for x in range(len(newanswerN)):
-    newdataY.append(newdataN[x])
-    newanswerY.append(newanswerN[x])
+# for x in range(len(newanswerN)):
+#     newdataY.append(newdataN[x])
+#     newanswerY.append(newanswerN[x])
 
-model.fit(newdataN,newanswerN,epochs=10,batch_size=700)
-# model.fit(data,labels,epochs=200,batch_size=700)
+# model.fit(newdataN,newanswerN,epochs=10,batch_size=700)
+model.fit(data,labels,epochs=2000,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
 
@@ -266,8 +267,8 @@ model.fit(newdataN,newanswerN,epochs=10,batch_size=700)
 k1 = 400
 k2 = 420
 
-# for x in range(k1,k2):
-#     print(data[x],labels[x])
+for x in range(k1,k2):
+    print(data[x],labels[x])
 # model.load_weights(fname)
 
 
