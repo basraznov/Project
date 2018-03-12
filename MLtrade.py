@@ -45,8 +45,8 @@ def diminput(Symblo):
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
         rL = bs.findRange(Last[x+1],2)
-        if Last[x] > rL[1]:
-            answer.append(0.3)
+        if Last[x] < rL[0]:
+            answer.append(1)
         else:
             answer.append(0)
     answer.append(None)
@@ -126,6 +126,12 @@ def diminput(Symblo):
     for x in range(0,len(Last)):
         if(Last[x] == None):
             Last[x] = 0
+    test = gf.flaot2deciamal(Last)
+
+
+    for x in range(0,len(Last)):
+        if(Last[x] == None):
+            Last[x] = 0
         if(x != 0):
             Last[x] = (Last[x]-AvgLast10[x-1])/AvgLast10[x-1]
         else:
@@ -137,6 +143,7 @@ def diminput(Symblo):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
+        temp.append(test[x])
         temp.append(Last[x]) #แก้ (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
         temp.append(RSI[x])
         temp.append(AvgVol[x]) #แก้ vol/volavg 10
@@ -153,7 +160,7 @@ def diminput(Symblo):
     dim.pop()
     print(len(answer),len(dim))
     for x in range(0,len(dim)): 
-        print(dim[x],answer[x])
+        print(x,dim[x],answer[x])
     return dim,answer
 
 
@@ -174,7 +181,7 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(125, activation='softmax', input_dim=6))
+model.add(Dense(125, activation='softmax', input_dim=8))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(1,activation = 'sigmoid'))
@@ -184,9 +191,10 @@ model.compile(optimizer=optimizer,
               metrics=['accuracy'])
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
-th = 600
+
 start = 300
 symbol = gf.allSymbol()
+th = symbol.index("PTT")
 data,answer = diminput(symbol[th])
 labels = answer
 SRAnswer = answer
@@ -266,44 +274,47 @@ print(k,len(data),k/len(data))
 #     newdataY.append(newdataN[x])
 #     newanswerY.append(newanswerN[x])
 
-# model.fit(newdataN,newanswerN,epochs=10,batch_size=700)
+# model.fit(newdataN,newanswerN,epochs=200,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
 k1 = 400
 k2 = 420
-print ("----")
-data = np.array(data)
-xx = data[:len(data),:6].tolist()
-yy = data[:len(data),6:].tolist()
-model.fit(xx,yy,epochs=200,batch_size=700)
-aa = data[k1:k2,:6]
-p = model.predict(aa)
-print(p)
-for y in range(0,len(p)):
-    if p[y] > 0.3:
-        print("Interest")
-    else:
-        print("Nope")
-
-
-# for x in range(0,20):
-#     print(d[x],l[x])
-
-
-for x in range(k1,k2):
-    print(data[x],labels[x])
-# model.load_weights(fname)
-
-
-# model.fit(data,labels,epochs=200,batch_size=700)
-# k = [data[x] for x in range(k1,k2)]
-# p = model.predict(k)
+# print ("----")
+# data = np.array(data)
+# xx = data[:len(data),:6].tolist()
+# yy = data[:len(data),6:].tolist()
+# model.fit(xx,yy,epochs=200,batch_size=700)
+# aa = data[k1:k2,:6]
+# p = model.predict(aa)
 # print(p)
 # for y in range(0,len(p)):
 #     if p[y] > 0.3:
 #         print("Interest")
 #     else:
 #         print("Nope")
+
+
+# for x in range(0,20):
+#     print(d[x],l[x])
+
+
+
+# model.load_weights(fname)
+
+
+# model.fit(data,labels,epochs=200,batch_size=700)
+
+for x in range(k1,k2):
+    print(data[x],labels[x])
+
+k = [data[x] for x in range(k1,k2)]
+p = model.predict(k)
+print(p)
+for y in range(0,len(p)):
+    if p[y] > 0.3:
+        print("Interest")
+    else:
+        print("Nope")
 
 
 # for x in range(0,len())

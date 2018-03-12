@@ -124,7 +124,7 @@ def tranfromAnswer(answer):
 
 
 symbol = gf.allSymbol()
-th = symbol.index("NPP")
+th = symbol.index("PTT")
 print(th)
 start = th
 data,answer = diminput(symbol[start])
