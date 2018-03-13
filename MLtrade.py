@@ -46,7 +46,7 @@ def diminput(Symblo):
     AvgVol = indi.AVGN(data=Vol,day=5)
     AvgVol10 = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
-    # print(len(Last),len(AvgLast),len(AvgLast10),len(Chper),len(Vol),len(MACD),len(MACDAvg10),len(RSI),len(AvgVol),len(AvgVol10))
+    print(len(Last),len(AvgLast),len(AvgLast10),len(Chper),len(Vol),len(MACD),len(MACDAvg10),len(RSI),len(AvgVol),len(AvgVol10))
     answer = []
     for x in range(0,len(Last)-1):
         # rL = bs.findRange(Last[x+1],2)
@@ -58,6 +58,7 @@ def diminput(Symblo):
             answer.append(0)
             continue
         if Last[x] > AvgLast10[x-1] and Vol[x] > AvgVol10[x-1]*2:
+            xxx += 1
             answer.append(1)
         else:
             answer.append(0)
