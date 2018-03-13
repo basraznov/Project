@@ -145,6 +145,11 @@ def diminput(Symblo):
     for x in range(0,len(Last)):
         if(Last[x] == None):
             Last[x] = 0
+    TLast = gf.flaot2deciamal(Last)
+
+    for x in range(0,len(Last)):
+        if(Last[x] == None):
+            Last[x] = 0
         if(x != 0):
             Last[x] = (Last[x]-AvgLast10[x-1])/AvgLast10[x-1]
         else:
@@ -155,6 +160,7 @@ def diminput(Symblo):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
+        temp.append(TLast[x])
         temp.append(Last[x]) #แก้ (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
         temp.append(RSI[x])
         temp.append(AvgVol[x]) #แก้ vol/volavg 10
@@ -194,9 +200,7 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(125, activation='softmax', input_dim=6))
-model.add(Dense(200, activation='softmax'))
-model.add(Dense(200, activation='softmax'))
+model.add(Dense(125, activation='softmax', input_dim=7))
 model.add(Dense(1,activation = 'sigmoid'))
 optimizer = optimizers.SGD(lr=0.02, momentum=0.0, decay=0.0, nesterov=False)
 model.compile(optimizer=optimizer,
@@ -208,6 +212,7 @@ model.compile(optimizer=optimizer,
 start = 300
 symbol = gf.allSymbol()
 th = symbol.index("PTT")
+#stock 
 data,answer = diminput(symbol[th])
 labels = answer
 SRAnswer = answer
@@ -315,7 +320,7 @@ k2 = 420
 # model.load_weights(fname)
 
 # print(labels)
-# model.fit(data,labels,epochs=200,batch_size=700)
+model.fit(data,labels,epochs=200,batch_size=700)
 
 for x in range(k1,k2):
     print(data[x],labels[x])
