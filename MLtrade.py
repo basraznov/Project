@@ -17,6 +17,9 @@ c = 0
 d = 0
 e = 0
 f = 0
+xxx = 0
+xxy = 0
+xxz = 0
 
 def diminput(Symblo):
     global a
@@ -25,6 +28,9 @@ def diminput(Symblo):
     global d
     global e
     global f
+    global xxx
+    global xxy
+    global xxz
 
     stock = gf.getData(Symblo)
     if len(stock) < 60:
@@ -39,16 +45,23 @@ def diminput(Symblo):
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVGN(data=Vol,day=5)
     AvgVol10 = indi.AVGN(data=Vol,day=10)
-    # NomalZ = gf.Normaliz(data=Vol,avg= AvgVol)
     EMA5 = indi.EMA(data=Last,day=5)
+    # print(len(Last),len(AvgLast),len(AvgLast10),len(Chper),len(Vol),len(MACD),len(MACDAvg10),len(RSI),len(AvgVol),len(AvgVol10))
     answer = []
-    Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)-1):
-        rL = bs.findRange(Last[x+1],2)
-        if Last[x] < rL[0]:
+        # rL = bs.findRange(Last[x+1],2)
+        # if Last[x] < rL[0]:
+        #     answer.append(1)
+        # else:
+        #     answer.append(0)
+        if x == 0 or Last[x] == None or AvgLast10[x-1] == None or Vol[x] == None or AvgVol10[x-1] == None:
+            answer.append(0)
+            continue
+        if Last[x] > AvgLast10[x-1] and Vol[x] > AvgVol10[x-1]*2:
             answer.append(1)
         else:
             answer.append(0)
+    Last = list(filter(lambda a: a != None, Last))
     answer.append(None)
     Elogic = [None]
     for x in range(0,len(Last)-1):
@@ -123,11 +136,10 @@ def diminput(Symblo):
             AvgVol[x] = 0
     AvgVol = gf.flaot2deciamal(AvgVol)
 
-    for x in range(0,len(Last)):
-        if(Last[x] == None):
-            Last[x] = 0
-    test = gf.flaot2deciamal(Last)
-
+    for x in range(0,len(Vol)):
+        if(Vol[x] == None):
+            Vol[x] = 0
+    Vol = gf.flaot2deciamal(Vol)
 
     for x in range(0,len(Last)):
         if(Last[x] == None):
@@ -138,21 +150,20 @@ def diminput(Symblo):
             Last[x] = 0
     Last = gf.flaot2deciamal(Last)
 
-
     for x in range(0,len(Last)):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
-        temp.append(test[x])
         temp.append(Last[x]) #แก้ (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
         temp.append(RSI[x])
         temp.append(AvgVol[x]) #แก้ vol/volavg 10
         temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน
         temp.append(AvgLast[x]) #ไม่ต้อง
-        temp.append(Elogic[x])
+        # temp.append(Elogic[x])
         dim.append(temp)
         # print(temp)
         temp = []
+    
 
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
@@ -160,7 +171,8 @@ def diminput(Symblo):
     dim.pop()
     print(len(answer),len(dim))
     for x in range(0,len(dim)): 
-        print(x,dim[x],answer[x])
+        if (answer[x] == 1):
+            print(x,dim[x],answer[x])
     return dim,answer
 
 
@@ -181,7 +193,7 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(125, activation='softmax', input_dim=8))
+model.add(Dense(125, activation='softmax', input_dim=6))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(200, activation='softmax'))
 model.add(Dense(1,activation = 'sigmoid'))
@@ -227,17 +239,17 @@ l = 0
 m = 0
 p = 1
 # print(len(data),len(labels),"asasdasd")
-for x in range(0,len(data)-1):
-    if (data[x][4])*100 == answer[x]:
-        k+=1
-    if answer[x] == 1:
-        l+=1
-    if answer[x] == 0:
-        j+=1
-    if answer[x] == -1:
-        m+=1
-    p += 1
-print(k,len(data),k/len(data))
+# for x in range(0,len(data)-1):
+    # if (data[x][4])*100 == answer[x]:
+    #     k+=1
+    # if answer[x] == 1:
+    #     l+=1
+    # if answer[x] == 0:
+    #     j+=1
+    # if answer[x] == -1:
+    #     m+=1
+    # p += 1
+print(k,len(data),k/len(data),xxx,xxy,xxz)
 # print(l,j,m)
 # print(a,b,c,d)
 # print(e,f)
@@ -301,7 +313,7 @@ k2 = 420
 
 # model.load_weights(fname)
 
-
+# print(labels)
 # model.fit(data,labels,epochs=200,batch_size=700)
 
 for x in range(k1,k2):
