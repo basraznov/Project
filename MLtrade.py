@@ -21,7 +21,7 @@ xxx = 0
 xxy = 0
 xxz = 0
 
-AllFeature = 4
+AllFeature = 8
 NumFeature = 7
 
 def diminput(Symbol):
@@ -62,7 +62,7 @@ def diminput(Symbol):
             answer.append(0)
             continue
         if Last[x] > AvgLast10[x-1] and Vol[x] > AvgVol10[x-1]*2:
-            answer.append(2)
+            answer.append(1)
         else:
             answer.append(0)
     Last = list(filter(lambda a: a != None, Last))
@@ -163,17 +163,17 @@ def diminput(Symbol):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
-        # temp.append(TLast[x])
+        temp.append(TLast[x])
         temp.append(Last[x]) # (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย # 5% 10%
-        # temp.append(RSI[x]) #เพิ่มขึ้นหรือลดลง มากกว่า
+        temp.append(RSI[x]) #เพิ่มขึ้นหรือลดลง มากกว่า
         temp.append(AvgVol[x]) # แก้ vol/volavg 10 # 100%
-        # temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน #เพิ่มขึ้นหรือลดลง
+        temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน #เพิ่มขึ้นหรือลดลง
         temp.append(AvgLast[x]) #ไม่ต้อง
-        # temp.append(Elogic[x])
+        temp.append(Elogic[x])
         dim.append(temp)
         # print(temp)
         temp = []
-    
+        #Chper,Last,(Last-AvgLast)/AvgLast,RSI,Vol/AvgVol,MACD,Last/AvgLast
 
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
@@ -256,8 +256,8 @@ symbol = gf.allSymbol()
 data = []
 labels = []
 k = 0
-# goodStock = ["PTT","BANPU"]
-goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH"]
+goodStock = ["PTT"]
+# goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH"]
 # goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH","HANA","KCE","SUC","AYUD","PTL","DDD","B-WORK","WHART","THE","TMT","ERW","CENTEL"]
 for x in range(len(goodStock)):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x)/(len(goodStock))) )
@@ -274,6 +274,13 @@ for x in range(len(goodStock)):
         traceback.print_exc()
         exit()
 print("Download progress: 100.00")
+
+with open("DataForML.txt", 'a') as out:
+    for y in range(len(data)):
+        for x in range(len(data[y])):
+            out.write(str(data[y][x])+',')
+        out.write(str(labels[y])+'\n')
+
 data = np.array(data)
 labels = np.array(labels)
 labels = np.reshape(labels,(len(labels),1))
@@ -283,7 +290,7 @@ dl0 = np.zeros([0,AllFeature+1], dtype=float)
 for x in range(len(dl)):
     if dl[x][-1] == 0:
         dl0 = np.append(dl0, np.reshape(dl[x],(1,AllFeature+1)), axis=0)
-    if dl[x][-1] == 2:
+    if dl[x][-1] == 1:
         dl1 = np.append(dl1, np.reshape(dl[x],(1,AllFeature+1)), axis=0)
 print (dl1.shape,dl0.shape)
 randl0 = np.zeros([0,AllFeature+1], dtype=float)
@@ -300,7 +307,7 @@ np.random.shuffle(alldl)
 separater = len(alldl)-10
 data = alldl[:separater,:AllFeature]
 labels = alldl[0:separater,AllFeature:]
-print(data)
+# print(data)
 # print (temp)
 ############################################################################## 
 
@@ -400,6 +407,7 @@ for y in range(0,len(p)):
         print("Interest")
     else:
         print("Nope")
+    
 
 
 # for x in range(0,len())
