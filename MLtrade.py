@@ -21,7 +21,10 @@ xxx = 0
 xxy = 0
 xxz = 0
 
-def diminput(Symblo):
+AllFeature = 4
+NumFeature = 7
+
+def diminput(Symbol):
     global a
     global b
     global c
@@ -31,8 +34,9 @@ def diminput(Symblo):
     global xxx
     global xxy
     global xxz
+    global AllFeature
 
-    stock = gf.getData(Symblo)
+    stock = gf.getData(Symbol)
     if len(stock) < 60:
         return None,None
     Last = gf.getLast(stock)
@@ -46,7 +50,7 @@ def diminput(Symblo):
     AvgVol = indi.AVGN(data=Vol,day=5)
     AvgVol10 = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
-    print(len(Last),len(AvgLast),len(AvgLast10),len(Chper),len(Vol),len(MACD),len(MACDAvg10),len(RSI),len(AvgVol),len(AvgVol10))
+    # print(len(Last),len(AvgLast),len(AvgLast10),len(Chper),len(Vol),len(MACD),len(MACDAvg10),len(RSI),len(AvgVol),len(AvgVol10))
     answer = []
     for x in range(0,len(Last)-1):
         # rL = bs.findRange(Last[x+1],2)
@@ -58,8 +62,7 @@ def diminput(Symblo):
             answer.append(0)
             continue
         if Last[x] > AvgLast10[x-1] and Vol[x] > AvgVol10[x-1]*2:
-            xxx += 1
-            answer.append(1)
+            answer.append(2)
         else:
             answer.append(0)
     Last = list(filter(lambda a: a != None, Last))
@@ -160,11 +163,11 @@ def diminput(Symblo):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
             continue
         temp.append(Chper[x])
-        temp.append(TLast[x])
-        temp.append(Last[x]) #แก้ (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย
-        temp.append(RSI[x])
-        temp.append(AvgVol[x]) #แก้ vol/volavg 10
-        temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน
+        # temp.append(TLast[x])
+        temp.append(Last[x]) # (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย # 5% 10%
+        # temp.append(RSI[x]) #เพิ่มขึ้นหรือลดลง มากกว่า
+        temp.append(AvgVol[x]) # แก้ vol/volavg 10 # 100%
+        # temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน #เพิ่มขึ้นหรือลดลง
         temp.append(AvgLast[x]) #ไม่ต้อง
         # temp.append(Elogic[x])
         dim.append(temp)
@@ -176,10 +179,10 @@ def diminput(Symblo):
         answer.pop(0)
     answer.pop()
     dim.pop()
-    print(len(answer),len(dim))
-    for x in range(0,len(dim)): 
-        if (answer[x] == 1):
-            print(x,dim[x],answer[x])
+    # print(len(answer),len(dim),Symbol)
+    # for x in range(0,len(dim)): 
+    #     if (answer[x] == 1):
+    #         print(x,dim[x],answer[x])
     return dim,answer
 
 
@@ -200,50 +203,108 @@ def tranfromAnswer(answer):
     return tmp
 
 model = Sequential()
-model.add(Dense(125, activation='softmax', input_dim=7))
+model.add(Dense(200, activation='softmax', input_dim=AllFeature))
+model.add(Dense(500, activation='softmax'))
 model.add(Dense(1,activation = 'sigmoid'))
-optimizer = optimizers.SGD(lr=0.02, momentum=0.0, decay=0.0, nesterov=False)
+optimizer = optimizers.SGD(lr=0.125, momentum=0.00, decay=0, nesterov=False)
 model.compile(optimizer=optimizer,
-              loss='mean_squared_error',
-              metrics=['accuracy'])
+            loss='mean_squared_error',
+            metrics=['accuracy'])
 
 # model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
+# ######################################################################### old 
+# start = 300
+# symbol = gf.allSymbol()
+# th = symbol.index("PTT")
+# # stock 
+# data,answer = diminput(symbol[th])
+# labels = answer
+# SRAnswer = answer
+# # print("\n",len(labels),len(data))
+# stop = 300
+# # print(answer)
+# for x in range(start+1,stop):
+#     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
+#     sys.stdout.flush()
+#     try:
+#         dataT,answerT = diminput(symbol[x])
+#         if dataT == None or answerT == None:
+#             continue
+#         labelsT =  answerT
+#         # print("\n")
+#         data = connector(data,dataT)
+#         # print(len(labels),len(labelsT),"B")
+#         labels = connector(labels,labelsT)
+#         # print(len(labels),len(labelsT),"A")
+#         # SRAnswer = connector(SRAnswer,answerT)
+#         # print("\n",len(data),len(labels)," 321321321321 ")
+#     except Exception as e:
+#         print("Error in "+str(x)+" symbol is "+symbol[x])
+#         traceback.print_exc()
+#         exit()
+# print()
+# k = 0
+# j = 0
+# l = 0
+# m = 0
+# p = 1
+# ############################################################################
 
-start = 300
+
+############################################################################## new
 symbol = gf.allSymbol()
-th = symbol.index("PTT")
-#stock 
-data,answer = diminput(symbol[th])
-labels = answer
-SRAnswer = answer
-# print("\n",len(labels),len(data))
-stop = 300
-# print(answer)
-for x in range(start+1,stop):
-    sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
+data = []
+labels = []
+k = 0
+# goodStock = ["PTT","BANPU"]
+goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH"]
+# goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH","HANA","KCE","SUC","AYUD","PTL","DDD","B-WORK","WHART","THE","TMT","ERW","CENTEL"]
+for x in range(len(goodStock)):
+    sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x)/(len(goodStock))) )
     sys.stdout.flush()
     try:
-        dataT,answerT = diminput(symbol[x])
+        dataT,answerT = diminput(goodStock[x])
         if dataT == None or answerT == None:
             continue
         labelsT =  answerT
-        # print("\n")
         data = connector(data,dataT)
-        # print(len(labels),len(labelsT),"B")
         labels = connector(labels,labelsT)
-        # print(len(labels),len(labelsT),"A")
-        # SRAnswer = connector(SRAnswer,answerT)
-        # print("\n",len(data),len(labels)," 321321321321 ")
     except Exception as e:
         print("Error in "+str(x)+" symbol is "+symbol[x])
         traceback.print_exc()
         exit()
-print()
-k = 0
-j = 0
-l = 0
-m = 0
-p = 1
+print("Download progress: 100.00")
+data = np.array(data)
+labels = np.array(labels)
+labels = np.reshape(labels,(len(labels),1))
+dl = np.concatenate((data, labels), axis=1)
+dl1 = np.zeros([0,AllFeature+1], dtype=float)
+dl0 = np.zeros([0,AllFeature+1], dtype=float)
+for x in range(len(dl)):
+    if dl[x][-1] == 0:
+        dl0 = np.append(dl0, np.reshape(dl[x],(1,AllFeature+1)), axis=0)
+    if dl[x][-1] == 2:
+        dl1 = np.append(dl1, np.reshape(dl[x],(1,AllFeature+1)), axis=0)
+print (dl1.shape,dl0.shape)
+randl0 = np.zeros([0,AllFeature+1], dtype=float)
+count = 0
+randl0 = dl0
+while len(randl0) != len(dl1)*1:
+    ran = np.random.randint(len(dl0)-count, size=1)[0]
+    randl0 = np.delete(randl0, ran, 0)
+    # randl0 = np.append(dl0, np.reshape(dl0[ran],(1,AllFeature+1)), axis=0)
+    count += 1
+alldl = np.concatenate((randl0, dl1), axis=0)
+np.random.shuffle(alldl)
+# separater = int(len(alldl)*0.8)
+separater = len(alldl)-10
+data = alldl[:separater,:AllFeature]
+labels = alldl[0:separater,AllFeature:]
+print(data)
+# print (temp)
+############################################################################## 
+
+############################################################################## check anwser
 # print(len(data),len(labels),"asasdasd")
 # for x in range(0,len(data)-1):
     # if (data[x][4])*100 == answer[x]:
@@ -255,12 +316,13 @@ p = 1
     # if answer[x] == -1:
     #     m+=1
     # p += 1
-print(k,len(data),k/len(data),xxx,xxy,xxz)
+# print(k,len(data),k/len(data),xxx,xxy,xxz)
 # print(l,j,m)
 # print(a,b,c,d)
 # print(e,f)
+##############################################################################
 
-
+############################################################################## test new style
 # cY = 0
 # cN = 0
 # mm = 0
@@ -295,8 +357,8 @@ print(k,len(data),k/len(data),xxx,xxy,xxz)
 # model.fit(newdataN,newanswerN,epochs=200,batch_size=700)
 # model.save_weights(fname,overwrite=True)
 
-k1 = 400
-k2 = 420
+# k1 = 400
+# k2 = 420
 # print ("----")
 # data = np.array(data)
 # xx = data[:len(data),:6].tolist()
@@ -316,23 +378,33 @@ k2 = 420
 #     print(d[x],l[x])
 
 
-
+##############################################################################
 # model.load_weights(fname)
 
 # print(labels)
-model.fit(data,labels,epochs=200,batch_size=700)
+################################################################# train and predict
+model.fit(data,labels,epochs=200,batch_size=100)
 
-for x in range(k1,k2):
-    print(data[x],labels[x])
+preData = alldl[separater:,:AllFeature]
+preLabels = alldl[separater:,AllFeature:]
+print(preData)
+print(preLabels)
 
-k = [data[x] for x in range(k1,k2)]
-p = model.predict(k)
+# k = [data[x] for x in range(k1,k2)]
+p = model.predict(preData)
+print("---------------------------------")
 print(p)
+
 for y in range(0,len(p)):
-    if p[y] > 0.3:
+    if p[y] > 0.5:
         print("Interest")
     else:
         print("Nope")
 
 
 # for x in range(0,len())
+#################################################################
+
+
+
+#ให้จาร ข้อมูลที่ไปlearn

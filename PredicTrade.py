@@ -168,5 +168,3 @@ print(k,len(data),k/len(data))
 print(l,j,m)
 print(a,b,c,d)
 print(e,f)
-#RSI เกิน ให้ดูวันก่อนหน้าถ้าน้อยกว่า ให้ซื้อ 
-#ขายเอาRIS เป็นหลัก ไม่เอา vol
