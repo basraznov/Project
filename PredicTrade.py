@@ -2,23 +2,8 @@ import indicator as indi
 import format as gf
 import buyorsell as bs
 import sys
-import traceback
-
-a = 0
-b = 0
-c = 0
-d = 0
-e = 0
-f = 0
 
 def diminput(Symblo):
-    global a
-    global b
-    global c
-    global d
-    global e
-    global f
-    o = 0
     stock = gf.getData(Symblo)
     if len(stock) < 60:
         return None,None
@@ -51,23 +36,15 @@ def diminput(Symblo):
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
-            a += 1
             Elogic.append("Hold")
         elif buy == True and sell == False:
-            b += 1
             Elogic.append("Buy ")
         elif buy == False and sell == True:
-            c += 1
             Elogic.append("Sell")
         elif buy == True and sell == True:
-            d += 1
             Elogic.append("Hold")
         else:
             Elogic.append("Error")
-        if buy == True:
-            e += 1
-        if sell == True:
-            f += 1
     dim = []
     temp = []
     k = 0
@@ -90,19 +67,17 @@ def diminput(Symblo):
             continue
         temp.append(Date[x])
         temp.append(Last[x])
-        temp.append(RSI[x])
-        temp.append(AvgVol[x])
-        temp.append(MACD[x])
+        # temp.append(RSI[x])
+        # temp.append(AvgVol[x])
+        # temp.append(MACD[x])
         temp.append(Elogic[x])
         dim.append(temp)
-        print(temp)
+        # print(temp)
         temp = []
-
-        o+=1
+        
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
     answer.pop()
-    # dim.pop() # for ML only
     return dim,answer
 
 
@@ -123,51 +98,37 @@ def tranfromAnswer(answer):
     return tmp
 
 
-symbol = gf.allSymbol()
-th = symbol.index("KGI")
-print(th)
-start = th
-data,answer = diminput(symbol[start])
-labels = tranfromAnswer(answer)
-SRAnswer = answer
-stop = th
-for x in range(start+1,stop):
-    sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
-    sys.stdout.flush()
-    try:
-        dataT,answerT = diminput(symbol[x])
-        if dataT == None or answerT == None:
-            continue
-        labelsT =  tranfromAnswer(answerT)
-        data = connector(data,dataT)
-        labels = connector(labels,labelsT)
-        SRAnswer = connector(SRAnswer,answerT)
-    except Exception as e:
-        print("Error in "+str(x)+" symbol is "+symbol[x])
-        traceback.print_exc()
-        exit()
-print() 
-k = 0
-j = 0
-l = 0
-m = 0
-p = 1
-for x in range(0,len(data)):
-    if (x >= len(answer)):
-        break
-    if (data[x][5]) == answer[x]:
-        k+=1
-    if answer[x] == "Buy ":
-        l+=1
-    if answer[x] == "Hold":
-        j+=1
-    if answer[x] == "Sell":
-        m+=1
-    p += 1
-print(k,len(data),k/len(data))
-print(l,j,m)
-print(a,b,c,d)
-print(e,f)
+def predic(Symblo):
+    symbol = gf.allSymbol()
+    th = symbol.index(Symblo)
+    # print(th)
+    # start = th
+    data,answer = diminput(symbol[th])
+    # labels = tranfromAnswer(answer)
+    # SRAnswer = answer
+    return data
+    # stop = th
+    # for x in range(start+1,stop):
+    #     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x-start)/(stop-start)) )
+    #     sys.stdout.flush()
+    #     try:
+    #         dataT,answerT = diminput(symbol[x])
+    #         if dataT == None or answerT == None:
+    #             continue
+    #         labelsT =  tranfromAnswer(answerT)
+    #         data = connector(data,dataT)
+    #         labels = connector(labels,labelsT)
+    #         SRAnswer = connector(SRAnswer,answerT)
+    #     except Exception as e:
+    #         print("Error in "+str(x)+" symbol is "+symbol[x])
+    #         traceback.print_exc()
+    #         exit()
+    # print() 
+
+
+k = predic("PTT")
+for x in range(len(k)):
+    print(k[x])
 
 
 
