@@ -21,7 +21,7 @@ xxx = 0
 xxy = 0
 xxz = 0
 
-AllFeature = 8
+AllFeature = 6
 NumFeature = 7
 
 def diminput(Symbol):
@@ -93,83 +93,187 @@ def diminput(Symbol):
             f += 1
     dim = []
     temp = []
+    ######################################################################### old
+    # for x in range(0,len(Chper)):
+    #     if(Chper[x] == None):
+    #         Chper[x] = 0
+    #     else:
+    #         Chper[x] = Chper[x]/10
+    # Chper = gf.flaot2deciamal(Chper)
+
+    # for x in range(0,len(RSI)):
+    #     if(RSI[x] == None):
+    #         RSI[x] = 0
+    #     RSI[x] = RSI[x]/100
+    # RSI = gf.flaot2deciamal(RSI)
+
+    # for x in range(0,len(AvgLast10)):
+    #     if(AvgLast10[x] == None):
+    #         AvgLast10[x] = 0.01
+    # AvgLast10 = gf.flaot2deciamal(AvgLast10)
+    
+    # for x in range(0,len(AvgLast)):
+    #     if(AvgLast[x] == None):
+    #         AvgLast[x] = 0
+    #     if x != 0:
+    #         AvgLast[x] = AvgLast[x]/(AvgLast10[x-1])
+    #     else:
+    #         AvgLast[x] = 0
+    # AvgLast = gf.flaot2deciamal(AvgLast)
+
+    # # for x in range(0,len(Elogic)):
+    # #     if(Elogic[x] == None):
+    # #         Elogic[x] = 0.1
+    # #     Elogic[x] = Elogic[x]/100
+    # # Elogic = gf.flaot2deciamal(Elogic)
+
+    # for x in range(0,len(AvgVol10)):
+    #     if(AvgVol10[x] == None):
+    #         AvgVol10[x] = 10000
+    # AvgVol10 = gf.flaot2deciamal(AvgVol10)
+
+    # for x in range(0,len(AvgVol)):
+    #     if(AvgVol[x] == None):
+    #         AvgVol[x] = 0
+    #     if x != 0:
+    #         AvgVol[x] = AvgVol[x]/(AvgVol10[x-1])
+    #     else:
+    #         AvgVol[x] = 0
+    # AvgVol = gf.flaot2deciamal(AvgVol)
+
+    # for x in range(0,len(Vol)):
+    #     if(Vol[x] == None):
+    #         Vol[x] = 0
+    # Vol = gf.flaot2deciamal(Vol)
+
+    # for x in range(0,len(Last)):
+    #     if(Last[x] == None):
+    #         Last[x] = 0
+    # TLast = gf.flaot2deciamal(Last)
+
+    # for x in range(0,len(Last)):
+    #     if(Last[x] == None):
+    #         Last[x] = 0
+    #     if(x != 0):
+    #         Last[x] = (Last[x]-AvgLast10[x-1])/AvgLast10[x-1]
+    #     else:
+    #         Last[x] = 0
+    # Last = gf.flaot2deciamal(Last)
+    ############################################### old
+    ############################################### new
     for x in range(0,len(Chper)):
         if(Chper[x] == None):
             Chper[x] = 0
+        elif Chper[x] > 0:
+            Chper[x] = 0
         else:
-            Chper[x] = Chper[x]/10
-    Chper = gf.flaot2deciamal(Chper)
-
+            Chper[x] = 1
+    # Chper = gf.flaot2deciamal(Chper)
+    
+    RSIM = []
+    RSI70 = []
+    RSI30 = []
     for x in range(0,len(RSI)):
         if(RSI[x] == None):
             RSI[x] = 0
-        RSI[x] = RSI[x]/100
-    RSI = gf.flaot2deciamal(RSI)
+        if RSI[x] > 30:
+            RSI30.append(1)
+            RSI70.append(0)
+        elif RSI[x] < 70:
+            RSI70.append(1)
+            RSI30.append(0)
+        if x != 0:
+            if RSI[x] > RSI[x-1]:
+                RSIM.append(1)
+            else:
+                RSIM.append(0)
+        else:
+            RSIM.append(0)
 
     for x in range(0,len(AvgLast10)):
         if(AvgLast10[x] == None):
-            AvgLast10[x] = 0.01
+            AvgLast10[x] = 0.00
     AvgLast10 = gf.flaot2deciamal(AvgLast10)
-    
-    for x in range(0,len(AvgLast)):
-        if(AvgLast[x] == None):
-            AvgLast[x] = 0
-        if x != 0:
-            AvgLast[x] = AvgLast[x]/(AvgLast10[x-1])
-        else:
-            AvgLast[x] = 0
-    AvgLast = gf.flaot2deciamal(AvgLast)
 
-    # for x in range(0,len(Elogic)):
-    #     if(Elogic[x] == None):
-    #         Elogic[x] = 0.1
-    #     Elogic[x] = Elogic[x]/100
-    # Elogic = gf.flaot2deciamal(Elogic)
+
+    # for x in range(0,len(AvgLast)):
+    #     if(AvgLast[x] == None):
+    #         AvgLast[x] = 0
+    #     if x != 0:
+    #         AvgLast[x] = AvgLast[x]/(AvgLast10[x-1])
+    #     else:
+    #         AvgLast[x] = 0
+    # AvgLast = gf.flaot2deciamal(AvgLast)
+
+    for x in range(0,len(Elogic)):
+        if(Elogic[x] == None):
+            Elogic[x] = 0
+    Elogic = gf.flaot2deciamal(Elogic)
 
     for x in range(0,len(AvgVol10)):
         if(AvgVol10[x] == None):
-            AvgVol10[x] = 10000
+            AvgVol10[x] = 0
     AvgVol10 = gf.flaot2deciamal(AvgVol10)
+    
 
+    AvgVolM = []
     for x in range(0,len(AvgVol)):
         if(AvgVol[x] == None):
             AvgVol[x] = 0
         if x != 0:
-            AvgVol[x] = AvgVol[x]/(AvgVol10[x-1])
+            if AvgVol[x] > AvgVol10[x-1]:
+                AvgVolM.append(1)
+            else:
+                AvgVolM.append(0)
         else:
-            AvgVol[x] = 0
-    AvgVol = gf.flaot2deciamal(AvgVol)
+            AvgVolM.append(0)
 
-    for x in range(0,len(Vol)):
-        if(Vol[x] == None):
-            Vol[x] = 0
-    Vol = gf.flaot2deciamal(Vol)
+    # for x in range(0,len(Vol)):
+    #     if(Vol[x] == None):
+    #         Vol[x] = 0
+    # Vol = gf.flaot2deciamal(Vol)
 
+    # for x in range(0,len(Last)):
+    #     if(Last[x] == None):
+    #         Last[x] = 0
+    # TLast = gf.flaot2deciamal(Last)
+
+    Last10Avg = []
     for x in range(0,len(Last)):
         if(Last[x] == None):
             Last[x] = 0
-    TLast = gf.flaot2deciamal(Last)
-
-    for x in range(0,len(Last)):
-        if(Last[x] == None):
-            Last[x] = 0
-        if(x != 0):
-            Last[x] = (Last[x]-AvgLast10[x-1])/AvgLast10[x-1]
+        if x != 0:
+            if AvgLast10[x-1] > Last[x]:
+                Last10Avg.append(0)
+            else:
+                Last10Avg.append(1)
         else:
-            Last[x] = 0
-    Last = gf.flaot2deciamal(Last)
+            Last10Avg.append(0)
+    # print(len(RSIM),len(RSI70),len(RSI30),len(AvgVolM),len(Last10Avg))
+    #########Z##################################### new
 
     for x in range(0,len(Last)):
-        if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
-            continue
-        temp.append(Chper[x])
-        temp.append(TLast[x])
-        temp.append(Last[x]) # (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย # 5% 10%
-        temp.append(RSI[x]) #เพิ่มขึ้นหรือลดลง มากกว่า
-        temp.append(AvgVol[x]) # แก้ vol/volavg 10 # 100%
-        temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน #เพิ่มขึ้นหรือลดลง
-        temp.append(AvgLast[x]) #ไม่ต้อง
+        # if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None or AvgLast[x] == None):
+        #     continue
+        ########################################################## old
+        # temp.append(Chper[x])
+        # temp.append(TLast[x])
+        # temp.append(Last[x]) # (ราคาปัญจุบัน - ราคาเฉลีย)/ราคาเฉลีย # 5% 10%
+        # temp.append(RSI[x]) #เพิ่มขึ้นหรือลดลง มากกว่า
+        # temp.append(AvgVol[x]) # แก้ vol/volavg 10 # 100%
+        # temp.append(MACD[x]) # แก้ macdปัจุบัน / macdเฉลีย10วัน #เพิ่มขึ้นหรือลดลง
+        # temp.append(AvgLast[x]) #ไม่ต้อง
+        # temp.append(Elogic[x])
+        ######################################################### old
+        ######################################################### new
+        temp.append(RSIM[x])
+        temp.append(RSI70[x])
+        temp.append(RSI30[x])
+        temp.append(AvgVolM[x])
+        temp.append(Last10Avg[x])
         temp.append(Elogic[x])
+        # temp.append()
+        # temp.append()
         dim.append(temp)
         # print(temp)
         temp = []
@@ -179,12 +283,24 @@ def diminput(Symbol):
         answer.pop(0)
     answer.pop()
     dim.pop()
+
+
+    testanswer = []
+    for x in range(0,len(dim)):
+        if AvgVolM[x] == 1 and Last10Avg[x] == 1:
+            testanswer.append(1)
+        else:
+            testanswer.append(0)
+        # print(AvgVolM[x],dim[x][0],"||",Last10Avg[x],dim[x][1],"||",testanswer[x])
+    
+    # print(len(testanswer),len(dim),len(answer))
+
     # print(len(answer),len(dim),Symbol)
     # for x in range(0,len(dim)): 
     #     if (answer[x] == 1):
     #         print(x,dim[x],answer[x])
+    # return dim,testanswer
     return dim,answer
-
 
 def connector(data1,data2):
     for x in range(0,len(data2)):
@@ -194,19 +310,17 @@ def connector(data1,data2):
 def tranfromAnswer(answer):
     tmp = []
     for x in range(0,len(answer)):
-        if answer[x] == -1:
-            tmp.append([1,0,0])
-        if answer[x] == 0:
-            tmp.append([0,1,0])
         if answer[x] == 1:
-            tmp.append([0,0,1])
+            tmp.append([1,0])
+        if answer[x] == 0:
+            tmp.append([0,1])
     return tmp
 
 model = Sequential()
-model.add(Dense(200, activation='softmax', input_dim=AllFeature))
-model.add(Dense(500, activation='softmax'))
+model.add(Dense(20, activation='relu', input_dim=AllFeature))
+model.add(Dense(150, activation='relu'))
 model.add(Dense(1,activation = 'sigmoid'))
-optimizer = optimizers.SGD(lr=0.125, momentum=0.00, decay=0, nesterov=False)
+optimizer = optimizers.SGD(lr=2, momentum=0.00, decay=0, nesterov=False)
 model.compile(optimizer=optimizer,
             loss='mean_squared_error',
             metrics=['accuracy'])
@@ -256,9 +370,10 @@ symbol = gf.allSymbol()
 data = []
 labels = []
 k = 0
-goodStock = ["PTT"]
-# goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH"]
-# goodStock = ["PTT","BANPU","EA","CPF","MINT","PTTGC","IVL","TPIPL","SCC","CPALL","BEAUTY","AOT","BEM","ADVANC","TRUE","KBANK","SCB","KTC","MTLS","AMATA","CPN","VGI","RS","CBG","GFPT","CWT","AH","HANA","KCE","SUC","AYUD","PTL","DDD","B-WORK","WHART","THE","TMT","ERW","CENTEL"]
+goodStock = ["CBG"]
+# goodStock = ["CBG","ASIAN","GFPT","STA"]
+# goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY","CPALL","BEAUTY","HMPRO","BJC","SCC","TOA","TASCO","TPIPL","KCE","HANA","DELTA","SMT","CCET","PTT","BANPU","PTTEP","IRPC","TOP","ESSO","MTLS","SAWAD","KTC","AEONTS","CPF","MINT","M","TU","MALEE","TVO","TIPCO","BDMS","BH","BCH","CHG","SNC","TRUE","ADVANC","DTAC","INTUCH","JAS","SAMART","TIP","BLA","AYUD","BEC","WORK","RS","VGI","MAJOR","EA","FSMART","MONO","PTL","AJ","UTP","IVL","PTTGC","GGC","VNT","AMATA","CPN","LH","STEC","WHA","UNIQ","CK","CENTEL","ERW","AOT","BTS","PSL","THAI","TTA","AAV"]
+
 for x in range(len(goodStock)):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x)/(len(goodStock))) )
     sys.stdout.flush()
@@ -275,24 +390,29 @@ for x in range(len(goodStock)):
         exit()
 print("Download progress: 100.00")
 
-with open("DataForML.txt", 'a') as out:
-    for y in range(len(data)):
-        for x in range(len(data[y])):
-            out.write(str(data[y][x])+',')
-        out.write(str(labels[y])+'\n')
-
+# with open("DataForML.txt", 'a') as out:
+#     for y in range(len(data)):
+#         for x in range(len(data[y])):
+#             out.write(str(data[y][x])+',')
+#         out.write(str(labels[y])+'\n')
+# print(data[1])
+ln = 1
 data = np.array(data)
+Tlabels = tranfromAnswer(labels)
+Tlabels = np.array(Tlabels)
 labels = np.array(labels)
 labels = np.reshape(labels,(len(labels),1))
+# dl = np.concatenate((data, Tlabels), axis=1)
 dl = np.concatenate((data, labels), axis=1)
-dl1 = np.zeros([0,AllFeature+1], dtype=float)
-dl0 = np.zeros([0,AllFeature+1], dtype=float)
+dl1 = np.zeros([0,AllFeature+ln], dtype=float)
+dl0 = np.zeros([0,AllFeature+ln], dtype=float)
+print (dl1.shape,dl0.shape,dl.shape)
 for x in range(len(dl)):
-    if dl[x][-1] == 0:
-        dl0 = np.append(dl0, np.reshape(dl[x],(1,AllFeature+1)), axis=0)
-    if dl[x][-1] == 1:
-        dl1 = np.append(dl1, np.reshape(dl[x],(1,AllFeature+1)), axis=0)
-print (dl1.shape,dl0.shape)
+    if dl[x][-ln] == 0:
+        dl0 = np.append(dl0, np.reshape(dl[x],(1,AllFeature+ln)), axis=0)
+    if dl[x][-ln] == 1:
+        dl1 = np.append(dl1, np.reshape(dl[x],(1,AllFeature+ln)), axis=0)
+
 randl0 = np.zeros([0,AllFeature+1], dtype=float)
 count = 0
 randl0 = dl0
@@ -306,9 +426,7 @@ np.random.shuffle(alldl)
 # separater = int(len(alldl)*0.8)
 separater = len(alldl)-10
 data = alldl[:separater,:AllFeature]
-labels = alldl[0:separater,AllFeature:]
-# print(data)
-# print (temp)
+labels = alldl[:separater,AllFeature:]
 ############################################################################## 
 
 ############################################################################## check anwser
@@ -328,6 +446,11 @@ labels = alldl[0:separater,AllFeature:]
 # print(a,b,c,d)
 # print(e,f)
 ##############################################################################
+# for x in range(len(data)):
+#     if data[x][0] == 1 and data[x][0] == 1 and labels[x] == 1:
+#         print(data[x],labels[x],1)
+#     else:
+#         print(data[x],labels[x],0)
 
 ############################################################################## test new style
 # cY = 0
@@ -390,14 +513,14 @@ labels = alldl[0:separater,AllFeature:]
 
 # print(labels)
 ################################################################# train and predict
-model.fit(data,labels,epochs=200,batch_size=100)
+print(data.shape,labels.shape)
+model.fit(data,labels,epochs=300,batch_size=5)
 
 preData = alldl[separater:,:AllFeature]
 preLabels = alldl[separater:,AllFeature:]
 print(preData)
 print(preLabels)
 
-# k = [data[x] for x in range(k1,k2)]
 p = model.predict(preData)
 print("---------------------------------")
 print(p)

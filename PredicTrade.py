@@ -124,7 +124,7 @@ def tranfromAnswer(answer):
 
 
 symbol = gf.allSymbol()
-th = symbol.index("PTT")
+th = symbol.index("KGI")
 print(th)
 start = th
 data,answer = diminput(symbol[start])
@@ -168,3 +168,7 @@ print(k,len(data),k/len(data))
 print(l,j,m)
 print(a,b,c,d)
 print(e,f)
+
+
+
+
