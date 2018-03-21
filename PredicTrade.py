@@ -15,6 +15,7 @@ def diminput(Symblo):
     AvgVol = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
     Date = gf.getDate(Symblo)
+    # print(len(Last),len(Chper),len(Vol),len(MACD),len(RSI),len(AvgVol),len(EMA5),len(Date))
     answer = []
     Last = list(filter(lambda a: a != None, Last))
     for x in range(0,len(Last)):
@@ -62,10 +63,10 @@ def diminput(Symblo):
     RSI = gf.flaot2deciamal(RSI)
 
     for x in range(0,len(Last)):
-        if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None):
-            l=+1
-            continue
-        temp.append(Date[x][0])
+        # if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None):
+        #     l=+1
+        #     continue
+        temp.append(Date[x])
         temp.append(Last[x])
         # temp.append(RSI[x])
         # temp.append(AvgVol[x])
@@ -126,7 +127,8 @@ def predic(Symblo):
     # print() 
 
 
-# k = predic("PTT")
+# k = predic("AFC")
+# print(len(k))
 # for x in range(len(k)):
 #     print(k[x])
 

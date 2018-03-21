@@ -71,9 +71,22 @@ def allSymbol():
 
 def getDate(Symbol):
 	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
-	sql = "SELECT date FROM `trade` WHERE Symbol = %s"
+	sql = "SELECT date,last FROM `trade` WHERE Symbol = %s"
 	data=[Symbol]
 	cursor = db.cursor()
 	cursor.execute(sql,data)
 	results = cursor.fetchall()
+	results = list(results)
+	k = results
+	x = 0
+	while True:
+		if x == len(results):
+			break
+		if results[x][1] == None:
+			results.pop(x)
+			continue
+		results[x] = list(results[x])
+		x += 1
+	results = list(results)
+	results = [results.pop(0) for results in results]
 	return results
