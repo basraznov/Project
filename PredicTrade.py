@@ -65,7 +65,7 @@ def diminput(Symblo):
         if(RSI[x] == None or AvgVol[x] == None or MACD[x] == None or Elogic[x] == None):
             l=+1
             continue
-        temp.append(Date[x])
+        temp.append(Date[x][0])
         temp.append(Last[x])
         # temp.append(RSI[x])
         # temp.append(AvgVol[x])
@@ -74,7 +74,7 @@ def diminput(Symblo):
         dim.append(temp)
         # print(temp)
         temp = []
-        
+
     for x in range(0,len(answer)-len(dim)):
         answer.pop(0)
     answer.pop()
@@ -126,9 +126,9 @@ def predic(Symblo):
     # print() 
 
 
-k = predic("PTT")
-for x in range(len(k)):
-    print(k[x])
+# k = predic("PTT")
+# for x in range(len(k)):
+#     print(k[x])
 
 
 
