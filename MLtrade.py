@@ -370,9 +370,9 @@ symbol = gf.allSymbol()
 data = []
 labels = []
 k = 0
-goodStock = ["CBG"]
+# goodStock = ["CBG"]
 # goodStock = ["CBG","ASIAN","GFPT","STA"]
-# goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY","CPALL","BEAUTY","HMPRO","BJC","SCC","TOA","TASCO","TPIPL","KCE","HANA","DELTA","SMT","CCET","PTT","BANPU","PTTEP","IRPC","TOP","ESSO","MTLS","SAWAD","KTC","AEONTS","CPF","MINT","M","TU","MALEE","TVO","TIPCO","BDMS","BH","BCH","CHG","SNC","TRUE","ADVANC","DTAC","INTUCH","JAS","SAMART","TIP","BLA","AYUD","BEC","WORK","RS","VGI","MAJOR","EA","FSMART","MONO","PTL","AJ","UTP","IVL","PTTGC","GGC","VNT","AMATA","CPN","LH","STEC","WHA","UNIQ","CK","CENTEL","ERW","AOT","BTS","PSL","THAI","TTA","AAV"]
+goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY","CPALL","BEAUTY","HMPRO","BJC","SCC","TOA","TASCO","TPIPL","KCE","HANA","DELTA","SMT","CCET","PTT","BANPU","PTTEP","IRPC","TOP","ESSO","MTLS","SAWAD","KTC","AEONTS","CPF","MINT","M","TU","MALEE","TVO","TIPCO","BDMS","BH","BCH","CHG","SNC","TRUE","ADVANC","DTAC","INTUCH","JAS","SAMART","TIP","BLA","AYUD","BEC","WORK","RS","VGI","MAJOR","EA","FSMART","MONO","PTL","AJ","UTP","IVL","PTTGC","GGC","VNT","AMATA","CPN","LH","STEC","WHA","UNIQ","CK","CENTEL","ERW","AOT","BTS","PSL","THAI","TTA","AAV"]
 
 for x in range(len(goodStock)):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x)/(len(goodStock))) )
@@ -514,7 +514,7 @@ labels = alldl[:separater,AllFeature:]
 # print(labels)
 ################################################################# train and predict
 print(data.shape,labels.shape)
-model.fit(data,labels,epochs=300,batch_size=5)
+model.fit(data,labels,epochs=100,batch_size=5)
 
 preData = alldl[separater:,:AllFeature]
 preLabels = alldl[separater:,AllFeature:]
@@ -524,14 +524,17 @@ print(preLabels)
 p = model.predict(preData)
 print("---------------------------------")
 print(p)
-
+correct = 0
 for y in range(0,len(p)):
     if p[y] > 0.5:
         print("Interest")
     else:
         print("Nope")
-    
-
+    if p[y] > 0.5 and preLabels[y] == 1:
+        correct += 1
+    elif p[y] < 0.5 and preLabels[y] == 0:
+        correct += 1
+print(correct/len(p)*100)
 
 # for x in range(0,len())
 #################################################################
