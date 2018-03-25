@@ -13,27 +13,30 @@ import datetime
 import multiprocessing
 
 AllFeature = 6
-# fname = "Save.hdf5"
+fname = "Save.hdf5"
 
-# model = Sequential()
-# model.add(Dense(20, activation='relu', input_dim=AllFeature))
-# model.add(Dense(150, activation='relu'))
-# model.add(Dense(80, activation='relu'))
-# model.add(Dense(1,activation = 'sigmoid'))
-# optimizer = optimizers.SGD(lr=2, momentum=0.00, decay=0, nesterov=False)
-# model.compile(optimizer=optimizer,
-#             loss='mean_squared_error',
-#             metrics=['accuracy'])
+model = Sequential()
+model.add(Dense(20, activation='relu', input_dim=AllFeature))
+model.add(Dense(150, activation='relu'))
+model.add(Dense(80, activation='relu'))
+model.add(Dense(1,activation = 'sigmoid'))
+optimizer = optimizers.SGD(lr=2, momentum=0.00, decay=0, nesterov=False)
+model.compile(optimizer=optimizer,
+            loss='mean_squared_error',
+            metrics=['accuracy'])
 
-# model.load_weights('Save.hdf5', by_name=True)
+model.load_weights('Save.hdf5', by_name=True)
+
+AllFeature = 6
 
 
 def collectFinal(Symbol):
     stock = gf.getData(Symbol)
     Date = gf.getDate(Symbol)
+    if not Date:
+        return None
     day = (datetime.datetime.now().date()-Date[-1]).days
-    print(day)
-    if len(stock) < 60 or day > 2:
+    if len(stock) < 60 or day > 3:
         return None
     Last = gf.getLast(stock)
     AvgLast = indi.AVGN(data=Last,day=5)
@@ -67,7 +70,6 @@ def collectFinal(Symbol):
             Elogic.append(9)
     dim = []
     temp = []
-
     for x in range(0,len(Chper)):
         if(Chper[x] == None):
             Chper[x] = 0
@@ -75,7 +77,6 @@ def collectFinal(Symbol):
             Chper[x] = 0
         else:
             Chper[x] = 1
-    
     RSIM = []
     RSI70 = []
     RSI30 = []
@@ -148,55 +149,26 @@ def collectFinal(Symbol):
 
     return dim[len(dim)-1]
 
-
-
 listSymbol = gf.allSymbol()
 testset = []
-# for x in range(len(listSymbol)):
-#     k = collectFinal(listSymbol[x])
-#     print(k,listSymbol[x])
-#     testset.append(k)
-# print(k)
+testSymbol = []
+Interest_Symbol = []
+# time = datetime.datetime.now()
+for x in range(len(listSymbol)):
+    sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x)/(len(listSymbol))) )
+    sys.stdout.flush()
+    k = collectFinal(listSymbol[x])
+    if k == None:
+        continue
+    testset.append(k)
+    testSymbol.append(listSymbol[x])
+print()
 
+p = model.predict(testset)
+for x in range(len(testSymbol)):
+    if p[x] > 0.5:
+        Interest_Symbol.append(testSymbol[x])
 
-Lstop = len(listSymbol)
-
-Fstop = 0
-Lstart = 0
-if Lstop % 2 == 0:
-    Fstop = int(Lstop/2)
-    Lstart = Fstop 
-else:
-    Fstop = int(Lstop/2)+1
-    Lstart = Fstop 
-
-# print(Fstop,Lstart)
-
-# for x in range(0,Fstop):
-# for x in range(Lstart,Lstop):
-# def fhalf():
-
-
-def First():
-    global Fstop
-    # for x in range(0,Fstop):
-    #     print(x)
-    print("asdasd")
-
-def Last():
-    global Lstart
-    global Lstop
-    # for x in range(Lstart,Lstop):
-    #     print(x)
-    print("321321321321")
-
-if __name__ == '__main__':
-    d = multiprocessing.Process(name='First', target=First)
-    n = multiprocessing.Process(name='Last', target=Last)
-
-    d.start()
-    n.start()
-
-# d.join(1)
-# print ('d.is_alive()', d.is_alive())
-# n.join()
+print(Interest_Symbol)
+file = open('Interest_Symbol.txt','w')
+file.write(str(Interest_Symbol))

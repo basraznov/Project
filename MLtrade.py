@@ -346,7 +346,7 @@ labels = []
 k = 0
 goodStock = ["CBG"]
 goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY"]
-goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY","CPALL","BEAUTY","HMPRO","BJC","SCC","TOA","TASCO","TPIPL","KCE","HANA","DELTA","SMT","CCET","PTT","BANPU","PTTEP","IRPC","TOP","ESSO","MTLS","SAWAD","KTC","AEONTS","CPF","MINT","M","TU","MALEE","TVO","TIPCO","BDMS","BH","BCH","CHG","SNC","TRUE","ADVANC","DTAC","INTUCH","JAS","SAMART","TIP","BLA","AYUD","BEC","WORK","RS","VGI","MAJOR","EA","FSMART","MONO","PTL","AJ","UTP","IVL","PTTGC","GGC","VNT","AMATA","CPN","LH","STEC","WHA","UNIQ","CK","CENTEL","ERW","AOT","BTS","PSL","THAI","TTA","AAV"]
+# goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY","CPALL","BEAUTY","HMPRO","BJC","SCC","TOA","TASCO","TPIPL","KCE","HANA","DELTA","SMT","CCET","PTT","BANPU","PTTEP","IRPC","TOP","ESSO","MTLS","SAWAD","KTC","AEONTS","CPF","MINT","M","TU","MALEE","TVO","TIPCO","BDMS","BH","BCH","CHG","SNC","TRUE","ADVANC","DTAC","INTUCH","JAS","SAMART","TIP","BLA","AYUD","BEC","WORK","RS","VGI","MAJOR","EA","FSMART","MONO","PTL","AJ","UTP","IVL","PTTGC","GGC","VNT","AMATA","CPN","LH","STEC","WHA","UNIQ","CK","CENTEL","ERW","AOT","BTS","PSL","THAI","TTA","AAV"]
 
 for x in range(len(goodStock)):
     sys.stdout.write("Download progress: %.2f%%   \r" % (100*(x)/(len(goodStock))) )

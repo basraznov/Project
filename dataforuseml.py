@@ -11,10 +11,11 @@ import multiprocessing
 AllFeature = 6
 
 
-
 def collectFinal(Symbol):
     stock = gf.getData(Symbol)
     Date = gf.getDate(Symbol)
+    if not Date:
+        return None
     day = (datetime.datetime.now().date()-Date[-1]).days
     if len(stock) < 60 or day > 2:
         return None
@@ -130,67 +131,16 @@ def collectFinal(Symbol):
     return dim[len(dim)-1]
 
 
-
 listSymbol = gf.allSymbol()
 testset = []
-time = datetime.datetime.now()
+# time = datetime.datetime.now()
 for x in range(len(listSymbol)):
     k = collectFinal(listSymbol[x])
     if k == None:
         continue
-    print(k,listSymbol[x])
+    # print(k,listSymbol[x])
     testset.append(k)
-print(k)
+print(testset)
 donetime = datetime.datetime.now()
-print(time-donetime)
+# print(donetime-time)
 
-
-Lstop = len(listSymbol)
-
-Fstop = 0
-Lstart = 0
-if Lstop % 2 == 0:
-    Fstop = int(Lstop/2)
-    Lstart = Fstop 
-else:
-    Fstop = int(Lstop/2)+1
-    Lstart = Fstop 
-
-# print(Fstop,Lstart)
-
-# for x in range(0,Fstop):
-# for x in range(Lstart,Lstop):
-# def fhalf():
-
-F = []
-L = []
-# def First():
-#     global Fstop
-#     k = None
-#     for x in range(0,Fstop):
-#         k = collectFinal(listSymbol[x])
-#         F.append(k)
-#         print(k,listSymbol[x])
-#     print("Done")
-
-# def Last():
-#     global Lstart
-#     global Lstop
-#     k = None
-#     for x in range(Lstart,Lstop):
-#         k = collectFinal(listSymbol[x])
-#         L.append(k)
-#         print(k,listSymbol[x])
-#     print("Done")
-
-# time = datetime.datetime.now()
-# if __name__ == '__main__':
-#     d = multiprocessing.Process(name='First', target=First)
-#     n = multiprocessing.Process(name='Last', target=Last)
-#     d.start()
-#     n.start()
-# donetime = datetime.datetime.now()
-# print(time-donetime)
-# d.join(1)
-# print ('d.is_alive()', d.is_alive())
-# n.join()
