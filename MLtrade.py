@@ -11,29 +11,10 @@ import traceback
 import random
 
 fname = "Save.hdf5"
-a = 0
-b = 0
-c = 0
-d = 0
-e = 0
-f = 0
-xxx = 0
-xxy = 0
-xxz = 0
 
 AllFeature = 6
-NumFeature = 7
 
 def diminput(Symbol):
-    global a
-    global b
-    global c
-    global d
-    global e
-    global f
-    global xxx
-    global xxy
-    global xxz
     global AllFeature
 
     stock = gf.getData(Symbol)
@@ -74,23 +55,15 @@ def diminput(Symbol):
         if buy == None or sell == None:
             Elogic.append(None)
         elif buy == False and sell == False:
-            a += 1
             Elogic.append(0)
         elif buy == True and sell == False:
-            b += 1
             Elogic.append(1)
         elif buy == False and sell == True:
-            c += 1
             Elogic.append(0)
         elif buy == True and sell == True:
-            d += 1
             Elogic.append(0)
         else:
             Elogic.append(9)
-        if buy == True:
-            e += 1
-        if sell == True:
-            f += 1
     dim = []
     temp = []
     ######################################################################### old
@@ -285,12 +258,12 @@ def diminput(Symbol):
     dim.pop()
 
 
-    testanswer = []
-    for x in range(0,len(dim)):
-        if AvgVolM[x] == 1 and Last10Avg[x] == 1:
-            testanswer.append(1)
-        else:
-            testanswer.append(0)
+    # testanswer = []
+    # for x in range(0,len(dim)):
+    #     if AvgVolM[x] == 1 and Last10Avg[x] == 1:
+    #         testanswer.append(1)
+    #     else:
+    #         testanswer.append(0)
         # print(AvgVolM[x],dim[x][0],"||",Last10Avg[x],dim[x][1],"||",testanswer[x])
     
     # print(len(testanswer),len(dim),len(answer))
@@ -319,6 +292,7 @@ def tranfromAnswer(answer):
 model = Sequential()
 model.add(Dense(20, activation='relu', input_dim=AllFeature))
 model.add(Dense(150, activation='relu'))
+model.add(Dense(80, activation='relu'))
 model.add(Dense(1,activation = 'sigmoid'))
 optimizer = optimizers.SGD(lr=2, momentum=0.00, decay=0, nesterov=False)
 model.compile(optimizer=optimizer,
@@ -370,8 +344,8 @@ symbol = gf.allSymbol()
 data = []
 labels = []
 k = 0
-# goodStock = ["CBG"]
-# goodStock = ["CBG","ASIAN","GFPT","STA"]
+goodStock = ["CBG"]
+goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY"]
 goodStock = ["CBG","ASIAN","GFPT","STA","AH","SAT","KBANK","TMB","KTB","SCB","BBL","BAY","CPALL","BEAUTY","HMPRO","BJC","SCC","TOA","TASCO","TPIPL","KCE","HANA","DELTA","SMT","CCET","PTT","BANPU","PTTEP","IRPC","TOP","ESSO","MTLS","SAWAD","KTC","AEONTS","CPF","MINT","M","TU","MALEE","TVO","TIPCO","BDMS","BH","BCH","CHG","SNC","TRUE","ADVANC","DTAC","INTUCH","JAS","SAMART","TIP","BLA","AYUD","BEC","WORK","RS","VGI","MAJOR","EA","FSMART","MONO","PTL","AJ","UTP","IVL","PTTGC","GGC","VNT","AMATA","CPN","LH","STEC","WHA","UNIQ","CK","CENTEL","ERW","AOT","BTS","PSL","THAI","TTA","AAV"]
 
 for x in range(len(goodStock)):
@@ -406,25 +380,31 @@ labels = np.reshape(labels,(len(labels),1))
 dl = np.concatenate((data, labels), axis=1)
 dl1 = np.zeros([0,AllFeature+ln], dtype=float)
 dl0 = np.zeros([0,AllFeature+ln], dtype=float)
-print (dl1.shape,dl0.shape,dl.shape)
+# print (dl1.shape,dl0.shape,dl.shape)
 for x in range(len(dl)):
+    sys.stdout.write("Calculate progress: %.2f%%   \r" % (100*(x)/(len(dl)))  )
+    sys.stdout.flush()
     if dl[x][-ln] == 0:
         dl0 = np.append(dl0, np.reshape(dl[x],(1,AllFeature+ln)), axis=0)
     if dl[x][-ln] == 1:
         dl1 = np.append(dl1, np.reshape(dl[x],(1,AllFeature+ln)), axis=0)
+print()
 
 randl0 = np.zeros([0,AllFeature+1], dtype=float)
 count = 0
 randl0 = dl0
 while len(randl0) != len(dl1)*1:
+    sys.stdout.write("Calculate true progress: %.2f%%   \r" % (100*(x)/(len(dl)))  )
+    sys.stdout.flush()
     ran = np.random.randint(len(dl0)-count, size=1)[0]
     randl0 = np.delete(randl0, ran, 0)
     # randl0 = np.append(dl0, np.reshape(dl0[ran],(1,AllFeature+1)), axis=0)
     count += 1
+print()
 alldl = np.concatenate((randl0, dl1), axis=0)
 np.random.shuffle(alldl)
 # separater = int(len(alldl)*0.8)
-separater = len(alldl)-10
+separater = len(alldl)-250
 data = alldl[:separater,:AllFeature]
 labels = alldl[:separater,AllFeature:]
 ############################################################################## 
@@ -510,11 +490,13 @@ labels = alldl[:separater,AllFeature:]
 
 ##############################################################################
 # model.load_weights(fname)
-
+# for x in range(len(data)):
+#     print(data[x])
 # print(labels)
 ################################################################# train and predict
 print(data.shape,labels.shape)
-model.fit(data,labels,epochs=100,batch_size=5)
+model.fit(data,labels,epochs=80,batch_size=20)
+model.save_weights(fname,overwrite=True)
 
 preData = alldl[separater:,:AllFeature]
 preLabels = alldl[separater:,AllFeature:]

@@ -3,8 +3,8 @@ import format as gf
 import buyorsell as bs
 import sys
 
-def diminput(Symblo):
-    stock = gf.getData(Symblo)
+def diminput(Symbol):
+    stock = gf.getData(Symbol)
     if len(stock) < 60:
         return None,None
     Last = gf.getLast(stock)
@@ -14,7 +14,7 @@ def diminput(Symblo):
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
-    Date = gf.getDate(Symblo)
+    Date = gf.getDate(Symbol)
     # print(len(Last),len(Chper),len(Vol),len(MACD),len(RSI),len(AvgVol),len(EMA5),len(Date))
     answer = []
     Last = list(filter(lambda a: a != None, Last))
@@ -99,9 +99,9 @@ def tranfromAnswer(answer):
     return tmp
 
 
-def predic(Symblo):
+def predic(Symbol):
     symbol = gf.allSymbol()
-    th = symbol.index(Symblo)
+    th = symbol.index(Symbol)
     # print(th)
     # start = th
     data,answer = diminput(symbol[th])

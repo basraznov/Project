@@ -1,22 +1,13 @@
 import PredicTrade as pt
 import datetime
 
-p = pt.predic("AFC")
+p = pt.predic("PTT")
 
 # datetime yyyy mm dd
-fdate = datetime.date(2018, 1, 1)
+fdate = datetime.date(2017, 9, 1)
 ldate = datetime.date(2018, 3, 21)
 now = datetime.datetime.now().date()
 
-# print(now,fdate,now > fdate,now < fdate)
-
-# if p[0][0] < fdate:
-#     print("First can't before",p[0][0])
-#     exit()
-# if fdate > now:
-#     fdate = now
-# if ldate > now:
-#     ldate = now
 ft = 0
 lt = 0
 if fdate != now and ldate <= now:
@@ -32,7 +23,6 @@ if fdate != now and ldate <= now:
         if lt == 0 and p[x][0] > ldate:
             ldate = p[x][0]
             lt += 1
-    print(ldate)
     fl = [x for x in p if fdate in x][0]
     ll = [x for x in p if ldate in x][0]
     fn = p.index(fl)
@@ -41,54 +31,77 @@ if fdate != now and ldate <= now:
     for x in range(fn,ln):
         interes.append(p[x])
 
-    money = 10000
+    buyrate = 1.001570
+    sellrate = 0.998430
+    money = 100000
     stock = 0
     m = 0
     n = 0
     k = 0
     selltime = 3
     price = 0
+    oldstock = 0
+    tstock = 0
 
     for x in range(len(interes)):
         print(interes[x])
         price = interes[x][1]
         if interes[x][2] == 'Buy ' and money != 0:
+            money = money / buyrate
             stock += money / price
+            # oldstock = stock
             money = 0
             m += 1
-            print("----------------------------------\n",stock,money,price,"\n----------------------------------")
+            # print("------------------------------------------------\nStock =",stock,"|Money =",money,"|Price buy =",price,"\n------------------------------------------------")
+            print("----------------------------------------------------------------------\nBuy at",price,"| Buy",stock,"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
             k = 0 
         if interes[x][2] == 'Sell' and stock != 0:
             if selltime == 2:
                 if k == 0:
+                    tstock = stock
                     money += price*stock*(0.5)
+                    money = money * sellrate
+                    print("----------------------------------------------------------------------\nSell at",price,"| Sell",tstock*(0.5),"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
                     stock = stock * 0.5
                     k += 1
                 else:
+                    tstock = stock
                     money += price*stock
+                    money = money * sellrat
+                    print("----------------------------------------------------------------------\nSell at",price,"| Sell",tstock,"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
                     stock = 0
                     k = 0
                 n += 1
             if selltime == 3:
                 if k == 0:
-                    money += price*stock*(0.66)
-                    stock = stock * 0.66
+                    tstock = stock
+                    money += price*stock*(0.33)
+                    stock -= stock * 0.33
+                    money = money * sellrate
+                    print("----------------------------------------------------------------------\nSell at",price,"| Sell",tstock*(0.33),"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
                     k += 1
                 elif k == 1:
+                    tstock = stock
                     money += price*stock*(0.5)
-                    stock = stock * 0.5
+                    stock -= stock * 0.5
+                    money = money * sellrate
+                    print("----------------------------------------------------------------------\nSell at",price,"| Sell",tstock*(0.5),"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
                     k += 1
                 else:
+                    tstock = stock
                     money += price*stock
                     stock = 0
+                    money = money * sellrate
+                    print("----------------------------------------------------------------------\nSell at",price,"| Sell",tstock,"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
                     k = 0
-            print("----------------------------------\n",stock,money,price,k,"\n----------------------------------")
+    tstock = 0
 
         # if x == 30:
         #     break
-    print(m,n)
     if stock == 0:
         print("You don't have stock. You have money",money)
+    elif stock != 0 and money != 0:
+        print("You have",stock,"stock Worth ",stock*price,"and Money",money,"  ",stock*price+money)
     else:
         print("You have",stock,"stock Worth ",stock*price)
 
