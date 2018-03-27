@@ -1,11 +1,11 @@
 import PredicTrade as pt
 import datetime
 
-p = pt.predic("PTT")
+p = pt.predic("TRUE")
 
 # datetime yyyy mm dd
-fdate = datetime.date(2017, 9, 1)
-ldate = datetime.date(2018, 3, 21)
+fdate = datetime.date(2017, 1, 1)
+ldate = datetime.date(2018, 3, 27)
 now = datetime.datetime.now().date()
 
 ft = 0
