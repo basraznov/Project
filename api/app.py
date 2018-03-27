@@ -3,6 +3,7 @@ from flask import Flask,session,redirect,Response
 import os
 import web as wb
 import random
+import json
 
 app = Flask(__name__)
 
@@ -37,9 +38,11 @@ def index():
         return session["user"]+'<br><br><form class="form-inline my-2 my-lg-0" action="/logout" method="get"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button> </form>'
     else:
         return '<form action="/login" method="post">  <input type="text" placeholder="Enter Username" name="username" required>     <input type="password" placeholder="Enter Password" name="password" required>   <button type="submit">Login</button></form>'
+
 @app.route("/logout")
 def logout():
-    session.clear()
+    session.pop('user', None)
+    # session.clear()
     return "Done"
 
 @app.route("/register",methods=["POST"])
@@ -95,8 +98,26 @@ def adfav():
                     mimetype='application/json')
     return res
 @app.route("/showfav",methods=["GET"])
-def showfa():
-    
+def showfav():
+    if request.method == "GET":
+        user = session["user"]
+        k = wb.showfav(username=user)
+        if k == "No stock":
+            m = '{"status":"No stock in list"}'
+        else:
+            m = '{"stock":['
+            for x in k:
+                m += '"'+x[1]+'"'
+                if x != k[-1]:
+                    m += ','
+                else:
+                    m += ']}'
+    else:
+        m = '{"status":"NotGet"}'
+    res = Response(response=m,
+                    status=200,
+                    mimetype='application/json')
+    return res
 if __name__ == '__main__':
     app.secret_key = "askljir8(#&&-3'(3asdfa;sjkkl"
     app.run(host="0.0.0.0", port=8000)

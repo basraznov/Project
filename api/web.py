@@ -87,3 +87,15 @@ def adfav(username,status,stock):
         return "del done"
     else:
         return "error"
+
+def showfav(username):
+    mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+    sql = "SELECT * from `favorite` where  username = %s"
+    data = [username]
+    cursor = mydb.cursor()
+    cursor.execute(sql,data)
+    results = cursor.fetchall()
+    row = cursor.rowcount
+    if row < 1:
+        return "No stock"
+    return results
