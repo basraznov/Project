@@ -34,7 +34,6 @@ def register(username,password,email,tel):
     row = cursor.rowcount
     if row >= 1:
         return "username used"
-    pass
     sql = 'INSERT INTO `user`(`username`, `password`, `tel`, `email`) VALUES (%s,%s,%s,%s)'
     data = [username,hashpassword,email,tel]
     cursor = mydb.cursor()
@@ -42,3 +41,49 @@ def register(username,password,email,tel):
     mydb.commit()
     cursor.close()
     return "done"
+
+def adfav(username,status,stock):
+    mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+    sql = "SELECT * from `trade` where symbol = %s"
+    data = [stock]
+    cursor = mydb.cursor()
+    cursor.execute(sql,data)
+    results = cursor.fetchall()
+    row = cursor.rowcount
+    if row < 1:
+        return "No stock"
+    if status == 1:#add
+        sql = "SELECT * from `favorite` where stock = %s and username = %s"
+        data = [stock,username]
+        cursor = mydb.cursor()
+        cursor.execute(sql,data)
+        results = cursor.fetchall()
+        row = cursor.rowcount
+        if row >= 1:
+            return "already add"
+        
+        sql = 'INSERT INTO `favorite`(`username`, `stock`) VALUES (%s,%s)'
+        data = [username,stock]
+        cursor = mydb.cursor()
+        cursor.execute(sql,data)
+        mydb.commit()
+        cursor.close()
+        return "add done"
+    elif status == 0:#del
+        sql = "SELECT * from `favorite` where stock = %s and username = %s"
+        data = [stock,username]
+        cursor = mydb.cursor()
+        cursor.execute(sql,data)
+        results = cursor.fetchall()
+        row = cursor.rowcount
+        if row < 1:
+            return "Deleted"
+        sql = 'DELETE FROM `favorite` WHERE stock = %s and username = %s'
+        data = [stock,username]
+        cursor = mydb.cursor()
+        cursor.execute(sql,data)
+        mydb.commit()
+        cursor.close()
+        return "del done"
+    else:
+        return "error"

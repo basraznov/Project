@@ -33,23 +33,26 @@ AllFeature = 6
 def collectFinal(Symbol):
     stock = gf.getData(Symbol)
     Date = gf.getDate(Symbol)
+    Vol = gf.getVol(stock)
     if not Date:
+        return None
+    if Vol[-1] < 10000000:
         return None
     day = (datetime.datetime.now().date()-Date[-1]).days
     if len(stock) < 60 or day > 3:
+        return None
+    if Symbol.find('-') != -1:
         return None
     Last = gf.getLast(stock)
     AvgLast = indi.AVGN(data=Last,day=5)
     AvgLast10 = indi.AVGN(data=Last,day=10)
     Chper = gf.getChPer(stock)
-    Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
     MACDAvg10 = indi.AVGN(data=MACD,day=10)
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVGN(data=Vol,day=5)
     AvgVol10 = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
-    
 
     Last = list(filter(lambda a: a != None, Last))
     Elogic = [None]

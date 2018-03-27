@@ -1,52 +1,107 @@
 from flask import request
-from flask import Flask,session,redirect
+from flask import Flask,session,redirect,Response
 import os
 import web as wb
+import random
 
 app = Flask(__name__)
 
-@app.route('/login', methods=['POST','GET'])
+@app.route("/login", methods=["POST","GET"])
 def login():
-    if request.method == 'POST':
-        if 'username' in request.form and 'password' in request.form:
-            username =  request.form['username']
-            password =  request.form['password']
+    if request.method == "POST":
+        if "username" in request.form and "password" in request.form:
+            username =  request.form["username"]
+            password =  request.form["password"]
             data = wb.login(username=username,password=password)
-            if data == "UPworng":
-                return "{'status':'Username or password Wrong'}"
-            elif data == "error":
-                return "{'status':'Something error'}"
+            if data == 'UPworng':
+                m = '{"status":"Username or password Wrong"}'
+            elif data == 'error':
+                m = '{"status":"Something error"}'
             else:
-                session['user'] = data[0][0]
-            return "{'status':'done'}"
+                session["user"] = data[0][0]
+                session["key"] = random.randint(0,10)
+                m = '{"status":"done"}'
         else:
-            return "{'status':'error'}"
+            m = '{"status":"error"}'
     else:
-        return "{'status':'NotPost'}"
+        m = '{"status":"NotPost"}'
 
-@app.route('/logout')
+    res = Response(response=m,
+                status=200,
+                mimetype='application/json')
+    return res
+
+@app.route("/index")
+def index():
+    if session.get("user"):
+        return session["user"]+'<br><br><form class="form-inline my-2 my-lg-0" action="/logout" method="get"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button> </form>'
+    else:
+        return '<form action="/login" method="post">  <input type="text" placeholder="Enter Username" name="username" required>     <input type="password" placeholder="Enter Password" name="password" required>   <button type="submit">Login</button></form>'
+@app.route("/logout")
 def logout():
     session.clear()
-    return redirect("/")
+    return "Done"
 
-@app.route('/register',methods=['POST'])
+@app.route("/register",methods=["POST"])
 def register():
-    if request.method == 'POST':
-        if 'username' in request.form and 'password' in request.form and 'tel' in request.form and 'email' in request.form:
-            username = request.form['username']
-            password = request.form['password']
-            email = request.form['email']
-            tel = str(request.form['tel'])
+    if request.method == "POST":
+        if "username" in request.form and "password" in request.form and "tel" in request.form and "email" in request.form:
+            username = request.form["username"]
+            password = request.form["password"]
+            email = request.form["email"]
+            tel = str(request.form["tel"])
             insert = wb.register(username = username, password = password,email = email,tel=tel)
-            if insert == "done":
-                return "{'status':'done'}"
-            if insert == "username used":
-                return "{'status':'username is used'}"
+            if insert == 'done':
+                m = '{"status":"done"}'
+            if insert == 'username used':
+                m = '{"status":"username is used"}'
         else:
-            return "{'status':'error'}"
+            m = '{"status":"Error"}'
     else:
-        return "{'status':'NotPost'}"
+        m = '{"status":"NotPost"}'
+    
+    res = Response(response=m,
+                    status=200,
+                    mimetype='application/json')
+    return res
 
-if __name__ == "__main__":
-    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-    app.run(host='0.0.0.0', port=8000)
+
+@app.route("/adfav",methods=["POST"])
+def adfav():
+    if request.method == "POST": 
+        if session.get("user") and "stock" in request.form and "status" in request.form and session["user"] != None:
+            stock = request.form["stock"]
+            status = int(request.form["status"])
+            user = session["user"]
+            k = wb.adfav(username=user,status=status,stock=stock)
+            if k == "No stock":
+                m = '{"status":"No Stock"}'
+            elif k == "already add":
+                m = '{"status":"You have this stock"}'
+            elif k == "add done":
+                m = '{"status":"Done"}'
+            elif k == "Deleted":
+                m = '{"status":"You don\'t have this stock in list"}'
+            elif k == "del done":
+                m = '{"status":"Done"}'
+            else:
+                m = '{"status":"Error"}'
+        else:
+            m = '{"status":"Require login or wrong parameter"}'
+    else:
+        m = '{"status":"NotPost"}'
+    res = Response(response=m,
+                    status=200,
+                    mimetype='application/json')
+    return res
+@app.route("/showfav",methods=["GET"])
+def showfa():
+    
+if __name__ == '__main__':
+    app.secret_key = "askljir8(#&&-3'(3asdfa;sjkkl"
+    app.run(host="0.0.0.0", port=8000)
+
+
+
+
+
