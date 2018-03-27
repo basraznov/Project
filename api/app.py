@@ -34,16 +34,18 @@ def login():
 
 @app.route("/index")
 def index():
-    if session.get("user"):
+    if 'user' in session:
         return session["user"]+'<br><br><form class="form-inline my-2 my-lg-0" action="/logout" method="get"> <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button> </form>'
     else:
         return '<form action="/login" method="post">  <input type="text" placeholder="Enter Username" name="username" required>     <input type="password" placeholder="Enter Password" name="password" required>   <button type="submit">Login</button></form>'
 
 @app.route("/logout")
 def logout():
-    session.pop('user', None)
-    # session.clear()
-    return "Done"
+    session.clear()
+    if 'user' in session:
+        return "session still exist: "+session["user"]
+    else:
+        return "session was clear"
 
 @app.route("/register",methods=["POST"])
 def register():
@@ -72,7 +74,7 @@ def register():
 @app.route("/adfav",methods=["POST"])
 def adfav():
     if request.method == "POST": 
-        if session.get("user") and "stock" in request.form and "status" in request.form and session["user"] != None:
+        if 'user' in session and "stock" in request.form and "status" in request.form and session["user"] != None:
             stock = request.form["stock"]
             status = int(request.form["status"])
             user = session["user"]
@@ -80,7 +82,7 @@ def adfav():
             if k == "No stock":
                 m = '{"status":"No Stock"}'
             elif k == "already add":
-                m = '{"status":"You have this stock"}'
+                m = '{"status":"You have this stock"}'+session["user"]
             elif k == "add done":
                 m = '{"status":"Done"}'
             elif k == "Deleted":
@@ -97,6 +99,7 @@ def adfav():
                     status=200,
                     mimetype='application/json')
     return res
+
 @app.route("/showfav",methods=["GET"])
 def showfav():
     if request.method == "GET":
@@ -118,8 +121,31 @@ def showfav():
                     status=200,
                     mimetype='application/json')
     return res
+
+@app.route("/infostock",methods=['POST'])
+def infostock():
+    if request.method == "POST":
+        if 'user' in session and 'stock' in request.form and 'date' in request.form:
+            stock = request.form["stock"]
+            date = request.form["date"]
+            k = wb.infostock(stock,date)
+            if k == "stock close":
+                m = '{"status":"stock is not upto date or has been code"}'
+            m = '{"LastUpDate":"'+str(k[0][0])+'","open":"'+str(k[0][2])+'","high":"'+str(k[0][3])+'","low":"'+str(k[0][4])+'","last":"'+str(k[0][5])+'"}'
+        else:
+            m = '{"status":"Require login or wrong parameter"}'
+    else:
+        m = '{"status":"NotPost"}'
+    res = Response(response=m,
+                    status=200,
+                    mimetype='application/json')
+    return res
+
 if __name__ == '__main__':
-    app.secret_key = "askljir8(#&&-3'(3asdfa;sjkkl"
+    app.secret_key = "askljir8(#&&-3'(3asdfa;sjkkl"x
+    app.config.update(
+        SESSION_REFRESH_EACH_REQUEST = False
+    )
     app.run(host="0.0.0.0", port=8000)
 
 
