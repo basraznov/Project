@@ -134,7 +134,7 @@ for x in url:
     ShowData(data)
     name = None
     while True:
-        print("Press Y for add data into database, N to script or E to exit",end=" ")
+        print("Press Y for add data into database, N to skip or E to exit",end=" ")
         a = input()
         if a == 'y' or a == 'Y':
             name = tosql(data)
