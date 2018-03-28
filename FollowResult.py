@@ -1,11 +1,11 @@
 import PredicTrade as pt
 import datetime
 
-p = pt.predic("TRUE")
+p = pt.predic("KBANK")
 
 # datetime yyyy mm dd
-fdate = datetime.date(2017, 1, 1)
-ldate = datetime.date(2018, 3, 27)
+fdate = datetime.date(2018, 1, 1)
+ldate = datetime.date(2018, 3, 28)
 now = datetime.datetime.now().date()
 
 ft = 0
@@ -24,6 +24,12 @@ if fdate != now and ldate <= now:
             ldate = p[x][0]
             lt += 1
     fl = [x for x in p if fdate in x][0]
+    t = 0
+    for x in p:
+        if ldate in x:
+            t += 1
+    if t == 0:
+        ldate = p[-1][0]
     ll = [x for x in p if ldate in x][0]
     fn = p.index(fl)
     ln = p.index(ll)
@@ -95,17 +101,14 @@ if fdate != now and ldate <= now:
                     print("----------------------------------------------------------------------\nSell at",price,"| Sell",tstock,"Stock | Remain Stock",stock,"| Remain Money",money,"\n----------------------------------------------------------------------")
                     k = 0
     tstock = 0
-
-        # if x == 30:
-        #     break
     if stock == 0:
         print("You don't have stock. You have money",money)
     elif stock != 0 and money != 0:
         print("You have",stock,"stock Worth ",stock*price,"and Money",money,"  ",stock*price+money)
     else:
         print("You have",stock,"stock Worth ",stock*price)
-
-
+else:
+    print("wrong date")
 
 
 
