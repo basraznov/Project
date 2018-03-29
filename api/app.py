@@ -142,7 +142,7 @@ def infostock():
     return res
 
 if __name__ == '__main__':
-    app.secret_key = "askljir8(#&&-3'(3asdfa;sjkkl"x
+    app.secret_key = "askljir8(#&&-3'(3asdfa;sjkkl"
     app.config.update(
         SESSION_REFRESH_EACH_REQUEST = False
     )
