@@ -109,9 +109,3 @@ if fdate != now and ldate <= now:
         print("You have",stock,"stock Worth ",stock*price)
 else:
     print("wrong date")
-
-
-
-
-
-

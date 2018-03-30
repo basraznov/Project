@@ -61,7 +61,7 @@ def register():
             if insert == 'username used':
                 m = '{"status":"username is used"}'
         else:
-            m = '{"status":"Error"}'
+            m = '{"status":"wrong parameter"}'
     else:
         m = '{"status":"NotPost"}'
     
@@ -82,7 +82,7 @@ def adfav():
             if k == "No stock":
                 m = '{"status":"No Stock"}'
             elif k == "already add":
-                m = '{"status":"You have this stock"}'+session["user"]
+                m = '{"status":"You have this stock"}'
             elif k == "add done":
                 m = '{"status":"Done"}'
             elif k == "Deleted":
