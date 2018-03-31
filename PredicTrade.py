@@ -2,6 +2,7 @@ import indicator as indi
 import format as gf
 import buyorsell as bs
 import sys
+import datetime
 
 def diminput(Symbol):
     stock = gf.getData(Symbol)
@@ -126,12 +127,30 @@ def predic(Symbol):
     #         exit()
     # print() 
 
+def getAllLastpredic():
+    symbol = gf.allSymbol()
+    # w = symbol.index('BFIT')
+    # print(symbol[62])
+    allLast = []
+    temp = []
+    k = None
+    now = datetime.datetime.now().date()
+    for x in range(len(symbol)):
+        sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
+        sys.stdout.flush()
+        temp = predic(symbol[x])
+        # print(temp)
+        if temp == None:
+            continue
+        temp2 = temp[-1]
+        # print(temp2[2],symbol[x])
+        if (temp2[0] - now).days > 3:
+            continue
+        if temp2[2] != "Hold":
+            k = [symbol[x],temp2[2]]
+            print("jkl;")
+            allLast.append(k)
+    file = open('PD.txt','w')
+    file.write(str(allLast))
 
-# k = predic("AFC")
-# print(len(k))
-# for x in range(len(k)):
-#     print(k[x])
-
-
-
-
+getAllLastpredic()
