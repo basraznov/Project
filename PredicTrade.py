@@ -148,7 +148,6 @@ def getAllLastpredic():
             continue
         if temp2[2] != "Hold":
             k = [symbol[x],temp2[2]]
-            print("jkl;")
             allLast.append(k)
     file = open('PD.txt','w')
     file.write(str(allLast))
