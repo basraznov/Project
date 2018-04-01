@@ -9,13 +9,14 @@ def diminput(Symbol):
     if len(stock) < 60:
         return None,None
     Last = gf.getLast(stock)
+    if not Last:
+        return None,None
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
     RSI = indi.RSI(data=Last,day=14)
     AvgVol = indi.AVGN(data=Vol,day=10)
     EMA5 = indi.EMA(data=Last,day=5)
-    Date = gf.getDate(Symbol)
     # print(len(Last),len(Chper),len(Vol),len(MACD),len(RSI),len(AvgVol),len(EMA5),len(Date))
     answer = []
     Last = list(filter(lambda a: a != None, Last))
@@ -129,21 +130,20 @@ def predic(Symbol):
 
 def getAllLastpredic():
     symbol = gf.allSymbol()
-    # w = symbol.index('BFIT')
-    # print(symbol[62])
+    # w = symbol.index('ADAM')
+    # print(w)
     allLast = []
     temp = []
     k = None
     now = datetime.datetime.now().date()
     for x in range(len(symbol)):
-        sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
-        sys.stdout.flush()
+        print(symbol[x])
+        # sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
+        # sys.stdout.flush()
         temp = predic(symbol[x])
-        # print(temp)
         if temp == None:
             continue
         temp2 = temp[-1]
-        # print(temp2[2],symbol[x])
         if (temp2[0] - now).days > 3:
             continue
         if temp2[2] != "Hold":

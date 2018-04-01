@@ -173,5 +173,5 @@ for x in range(len(testSymbol)):
         Interest_Symbol.append(testSymbol[x])
 
 print(Interest_Symbol)
-file = open('Interest_Symbol.txt','w')
+file = open('ML.txt','w')
 file.write(str(Interest_Symbol))
