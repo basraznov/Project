@@ -138,9 +138,9 @@ def getAllLastpredic():
     k = None
     now = datetime.datetime.now().date()
     for x in range(len(symbol)):
-        print(symbol[x])
-        # sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
-        # sys.stdout.flush()
+        # print(symbol[x])
+        sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
+        sys.stdout.flush()
         temp = predic(symbol[x])
         if temp == None:
             continue
