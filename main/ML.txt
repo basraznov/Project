@@ -1,1 +1,1 @@
-['BWG', 'DIMET', 'FSMART', 'GL', 'HOTPOT', 'IVL', 'NWR', 'S', 'TRC', 'BIG', 'ACC', 'HPT']
+['BLAND', 'BTS', 'CGD', 'CHG', 'ECF', 'ECL', 'HMPRO', 'PSTC', 'PTT', 'TRC', 'TRUE', 'TSF', 'VGI', 'BDMS', 'U', 'COM7']
