@@ -23,8 +23,18 @@
             $stmt_result = $stmt->get_result();
             if($stmt_result->num_rows > 0){
                 $row_data = $stmt_result->fetch_assoc();
-                // $myfile = fopen("PD.txt", "r") or die("Unable to open file!");
-                // echo fread($myfile,filesize("PD.txt"));
+                $myfile = fopen("../main/PD.txt", "r") or die("Unable to open file!");
+                $file = fread($myfile,filesize("../main/PD.txt"));
+                $file = explode("], [",$file);
+                foreach ($file as &$value) {
+                    $value = explode(", ",$value);
+                    foreach ($value as &$supva){
+                        $supva = preg_replace('/[^a-z0-9\-]/i', '', $supva);
+                        if($stock === $supva[0]){
+                            echo "asd";
+                        }
+                    }
+                }
                 echo '{"status":"Success","last_update":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'"}';
                 break;
             }
