@@ -5,7 +5,7 @@ p = pt.predic('MANRIN')
 
 # datetime yyyy mm dd
 fdate = datetime.date(2018, 1, 1)
-ldate = datetime.date(2018, 3, 28)
+ldate = datetime.date(2018, 4, 1)
 now = datetime.datetime.now().date()
 
 ft = 0

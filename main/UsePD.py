@@ -1,3 +1,8 @@
+import format as gf
+import sys
+import PredicTrade as pt
+import datetime
+
 def getAllLastpredic():
     symbol = gf.allSymbol()
     w = symbol.index('MANRIN')
@@ -5,12 +10,14 @@ def getAllLastpredic():
     allLast = []
     temp = []
     k = None
+    m = 0
+    n = 0
     now = datetime.datetime.now().date()
-    for x in range(315,len(symbol)):
+    for x in range(len(symbol)):
         # print(symbol[x])
-        # sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
-        # sys.stdout.flush()
-        temp = predic(symbol[x])
+        sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
+        sys.stdout.flush()
+        temp = pt.predic(symbol[x])
         if temp == None:
             continue
         temp2 = temp[-1]
@@ -19,9 +26,17 @@ def getAllLastpredic():
         if temp2[2] != "Hold":
             k = [symbol[x],temp2[2]]
             allLast.append(k)
-            print("asdasd")
+            n += 1
+        if temp2[2] == "Hold":
+            m += 1
+
         print([symbol[x],temp2[2]])
-    file = open('PD.txt','w')
-    file.write(str(allLast))
+    print(m,n,len(allLast))
+    if not allLast:
+        file = open('PD.txt','w')
+        file.write("None")
+    else:
+        file = open('PD.txt','w')
+        file.write(str(allLast))
     
 getAllLastpredic()

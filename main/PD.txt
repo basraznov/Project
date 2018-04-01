@@ -1,1 +1,1 @@
-[['MANRIN', 'Buy '], ['SBPF', 'Sell'], ['SSPF', 'Sell'], ['CPH', 'Sell'], ['FE', 'Buy ']]
+[['SBPF', 'Sell'], ['CPH', 'Sell'], ['FE', 'Buy ']]

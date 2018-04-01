@@ -15,8 +15,7 @@ def diminput(Symbol):
         return None,None
     Date = gf.getDate(Symbol)
     day = (datetime.datetime.now().date()-Date[-1]).days
-    print(day,Last[-1])
-    if day > 5:
+    if day > 4:
         return None,None
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)

@@ -18,30 +18,43 @@
         $k = 0;
         while (true){
             $stmt = $db->prepare("SELECT * from `trade` where  symbol = ? and date = ?;");
-            $stmt->bind_param('ss',$stock,$stdate);
+            $stmt->bind_param('ss',$stock,$date);
             $stmt->execute();
             $stmt_result = $stmt->get_result();
+            $trend = "";
             if($stmt_result->num_rows > 0){
                 $row_data = $stmt_result->fetch_assoc();
                 $myfile = fopen("../main/PD.txt", "r") or die("Unable to open file!");
                 $file = fread($myfile,filesize("../main/PD.txt"));
                 $file = explode("], [",$file);
-                foreach ($file as &$value) {
-                    $value = explode(", ",$value);
-                    foreach ($value as &$supva){
-                        $supva = preg_replace('/[^a-z0-9\-]/i', '', $supva);
-                        if($stock === $supva[0]){
-                            echo "asd";
+                if($file = "None"){
+                    $trend = "Hold";
+                }
+                else{
+                    foreach ($file as &$value) {
+                        $value = explode(", ",$value);
+                        foreach ($value as &$supva){
+                            $supva = preg_replace('/[^a-z0-9\-]/i', '', $supva);
+                        }
+                        if($stock === $value[0]){
+                            $trend = $value[1];
+                            // echo $trend;
                         }
                     }
+                    if($trend === ""){
+                        $trend = "Hold";
+                    }
                 }
-                echo '{"status":"Success","last_update":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'"}';
+                echo '{"status":"Success","last_update":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","trend":"'.$trend.'"}';
                 break;
             }
             if($k > 4){
                 echo '{"status":"This stock is not up to date or don\'t have this stock"}';
                 break;
             }
+            $date = strtotime($date);
+            $date = strtotime('-1 day', $date);
+            $date = date("Y-m-d",$date );
             $k++;
         }    
     }
