@@ -11,6 +11,7 @@ def diminput(Symbol):
     Last = gf.getLast(stock)
     if not Last:
         return None,None
+    Date = gf.getDate(Symbol)
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
