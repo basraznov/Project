@@ -1,9 +1,9 @@
 <?php
     include("database.php");
+    include("lastupdate.php");
     header('Content-Type: application/json');
     session_start();
     date_default_timezone_set('Asia/Bangkok');
-    
     if(isset($_SESSION['username']) && isset($_POST['stock']) && isset($_POST['date'])){
         $stock = $_POST['stock'];
         $stdate = $_POST['date'];
@@ -45,7 +45,12 @@
                         $trend = "Hold";
                     }
                 }
-                echo '{"status":"Success","last_update":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","trend":"'.$trend.'"}';
+                if($date != $last_update){
+                    echo '{"status":"Success","date":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","trend":"None","last_update":"'.$last_update.'"}';
+                }
+                else{
+                    echo '{"status":"Success","date":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","trend":"'.$trend.'","last_update":"'.$last_update.'"}';
+                }
                 break;
             }
             if($k > 4){
