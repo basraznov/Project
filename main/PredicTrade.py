@@ -12,6 +12,9 @@ def diminput(Symbol):
     if not Last:
         return None,None
     Date = gf.getDate(Symbol)
+    day = (datetime.datetime.now().date()-Date[-1]).days
+    if day > 5:
+        return None,None
     Chper = gf.getChPer(stock)
     Vol = gf.getVol(stock)
     MACD = indi.MACD(Last)
