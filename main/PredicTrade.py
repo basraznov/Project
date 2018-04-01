@@ -11,8 +11,11 @@ def diminput(Symbol):
     Last = gf.getLast(stock)
     if not Last:
         return None,None
+    if Last[-1] == None:
+        return None,None
     Date = gf.getDate(Symbol)
     day = (datetime.datetime.now().date()-Date[-1]).days
+    print(day,Last[-1])
     if day > 5:
         return None,None
     Chper = gf.getChPer(stock)
@@ -131,29 +134,3 @@ def predic(Symbol):
     #         traceback.print_exc()
     #         exit()
     # print() 
-
-def getAllLastpredic():
-    symbol = gf.allSymbol()
-    # w = symbol.index('ADAM')
-    # print(w)
-    allLast = []
-    temp = []
-    k = None
-    now = datetime.datetime.now().date()
-    for x in range(len(symbol)):
-        # print(symbol[x])
-        sys.stdout.write("Download progress: %.2f%%   \r" % (x*100/len(symbol)) )
-        sys.stdout.flush()
-        temp = predic(symbol[x])
-        if temp == None:
-            continue
-        temp2 = temp[-1]
-        if (temp2[0] - now).days > 3:
-            continue
-        if temp2[2] != "Hold":
-            k = [symbol[x],temp2[2]]
-            allLast.append(k)
-    file = open('PD.txt','w')
-    file.write(str(allLast))
-
-getAllLastpredic()

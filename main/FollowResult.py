@@ -1,7 +1,7 @@
 import PredicTrade as pt
 import datetime
 
-p = pt.predic("KBANK")
+p = pt.predic('MANRIN')
 
 # datetime yyyy mm dd
 fdate = datetime.date(2018, 1, 1)
