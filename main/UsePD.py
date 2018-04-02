@@ -30,8 +30,8 @@ def getAllLastpredic():
         if temp2[2] == "Hold":
             m += 1
 
-        print([symbol[x],temp2[2]])
-    print(m,n,len(allLast))
+    #     print([symbol[x],temp2[2]])
+    # print(m,n,len(allLast))
     if not allLast:
         file = open('PD.txt','w')
         file.write("None")

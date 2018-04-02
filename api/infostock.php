@@ -27,7 +27,7 @@
                 $myfile = fopen("../main/PD.txt", "r") or die("Unable to open file!");
                 $file = fread($myfile,filesize("../main/PD.txt"));
                 $file = explode("], [",$file);
-                if($file = "None"){
+                if($file === "None"){
                     $trend = "Hold";
                 }
                 else{

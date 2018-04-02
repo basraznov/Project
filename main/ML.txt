@@ -1,1 +1,1 @@
-['BLAND', 'BTS', 'CGD', 'CHG', 'ECF', 'ECL', 'HMPRO', 'PSTC', 'PTT', 'TRC', 'TRUE', 'TSF', 'VGI', 'BDMS', 'U', 'COM7']
+['AAV', 'BCH', 'BLAND', 'CHG', 'ECL', 'HYDRO', 'IRPC', 'LH', 'PSTC', 'SPPT', 'VGI', 'BDMS', 'U', 'COM7']
