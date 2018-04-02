@@ -38,7 +38,6 @@
                         }
                         if($stock === $value[0]){
                             $trend = $value[1];
-                            // echo $trend;
                         }
                     }
                     if($trend === ""){
@@ -66,22 +65,4 @@
     else{
         echo '{"status":"Require login or wrong parameter"}';
     }
-
-
-
-
-// def infostock(stock,date):
-//     date = datetime.strptime(date, '%Y-%m-%d').date()
-//     mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
-//     sql = "SELECT * from `trade` where  symbol = %s and date = %s"
-//     for x in range(0,6):
-//         data = [stock,str(date)]
-//         cursor = mydb.cursor()
-//         cursor.execute(sql,data)
-//         results = cursor.fetchall()
-//         row = cursor.rowcount
-//         if row >= 1:
-//             return results
-//         date -= dt.timedelta(days=1)
-//     return "stock close"
-    ?>
+?>
