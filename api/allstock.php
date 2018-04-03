@@ -26,7 +26,7 @@
         if($file === "None"){
             $trend = "Hold";
         }
-        else{
+        else{   
             foreach ($file as &$value) {
                 $value = explode(", ",$value);
                 foreach ($value as &$supva){
@@ -38,7 +38,7 @@
         $x = 0;
         while ($row = mysqli_fetch_array($result, MYSQLI_NUM)){
             $trend = searchForId($row[1],$file);
-            $k = $k.'"'.$x.'":["'.$row[1].'","'.$row[2].'","'.$row[3].'","'.$row[4].'","'.$row[5].'","'.$row[6].'","'.$row[7].'","'.$row[8];
+            $k = $k.'"'.$x.'":["'.$row[1].'","'.$row[2].'","'.$row[5].'","'.$row[6].'","'.$row[7];//.'","'.$row[6].'","'.$row[7].'","'.$row[8];
             if($trend != false){
                 $k = $k.'","'.$trend.'"],';
                 }
