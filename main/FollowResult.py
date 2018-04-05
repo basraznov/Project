@@ -18,7 +18,7 @@ now = datetime.datetime.now().date()
 
 ft = 0
 lt = 0
-if fdate != now and ldate <= now:
+if fdate != now and ldate <= now and ldate > fdate:
     for x in range(len(p)):
         if p[x][0] ==  fdate:
             ft += 1

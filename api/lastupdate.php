@@ -11,7 +11,7 @@
             $row_data = $stmt_result->fetch_assoc();
             break;
         }
-        if ($k === 10){
+        if ($k === 5){
             break;
         }
         $date = strtotime($date);

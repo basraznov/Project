@@ -15,13 +15,34 @@ if(isset($_SESSION['username']) && isset($_POST['fdate']) && isset($_POST['ldate
     // echo preg_match("\d{4}-\d{2}-\d{2}",$fdate);
 
     if ($stmt->num_rows >= 1 && preg_match('/^[0-9]+$/',$money) && preg_match("/^\d{4}-\d{2}-\d{2}+$/",$fdate) && preg_match("/^\d{4}-\d{2}-\d{2}+$/",$ldate)){
-        $m = '{"status":"Success"';
+        $date = $fdate;
+        $k = 0;
+        while(true){
+            $stmt = $db->prepare("SELECT date from `trade` where date = ?;");
+            $stmt->bind_param('s',$date);
+            $stmt->execute();
+            $stmt_result = $stmt->get_result();
+            if($stmt_result->num_rows > 0){
+                $row_data = $stmt_result->fetch_assoc();
+                break;
+            }
+            if ($k === 5){
+                echo $m = '{"status":"too old"}';
+                die();
+                break;
+            }
+            $date = strtotime($date);
+            $date = strtotime('-1 day', $date);
+            $date = date("Y-m-d",$date );
+            $k++;
+        }
         $cmd = 'python ../main/FollowResult.py '.$stock.' '.$fdate.' '.$ldate.' '.$money;
         $result = shell_exec($cmd);
-        if($result ===){
-
+        if (strpos($result, 'wrong') > -1){
+            $m = '{"status":"Error"}';
         }
         else{
+            $m = '{"status":"Success"';
             $result = preg_replace("/[ ]/", "", $result);
             $x = 0;
             $result = explode("\n", $result);
@@ -36,8 +57,8 @@ if(isset($_SESSION['username']) && isset($_POST['fdate']) && isset($_POST['ldate
                 }
             } 
             $m = $m.'}';
-            echo $m;
         }
+        echo $m;
     }
     else{
         echo '{"status":"Require login or wrong parameter"}';
