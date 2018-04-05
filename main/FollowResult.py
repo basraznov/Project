@@ -65,7 +65,7 @@ if fdate != now and ldate <= now and ldate > fdate:
             # oldstock = stock
             money = 0
             m += 1
-            #date Trane Price Dealing_Stock Remain_Stock Remain_Money
+            #Date Trend Price Dealing_Stock Remain_Stock Remain_Money
             print('["',interes[x][0],'","buy","',price,'","',stock,'","',stock,'","',money,'"]')
             k = 0 
         if interes[x][2] == 'Sell' and stock != 0:
@@ -92,7 +92,7 @@ if fdate != now and ldate <= now and ldate > fdate:
                     stock -= stock * 0.33
                     money = money * sellrate
                     print('["',interes[x][0],'","sell","',price,'","',tstock*(0.33),'","',stock,'","',money,'"]')
-                    # print('["Date":"',interes[x][0],'","Trane":"sell","Price":"',price,'","Dealing_Stock":',tstock*(0.33),'","Remain Stock',stock,'","Remain Money',money,'],')
+                    # print('["Date":"',interes[x][0],'","Trend":"sell","Price":"',price,'","Dealing_Stock":',tstock*(0.33),'","Remain Stock',stock,'","Remain Money',money,'],')
                     k += 1
                 elif k == 1:
                     tstock = stock
@@ -100,7 +100,7 @@ if fdate != now and ldate <= now and ldate > fdate:
                     stock -= stock * 0.5
                     money = money * sellrate
                     print('["',interes[x][0],'","sell","',price,'","',tstock*(0.5),'","',stock,'","',money,'"]')
-                    # print('["Date":"',interes[x][0],'","Trane":"sell","Price":"',price,'","Dealing_Stock":',tstock*(0.5),'","Remain Stock',stock,'","Remain Money',money,'],')
+                    # print('["Date":"',interes[x][0],'","Trend":"sell","Price":"',price,'","Dealing_Stock":',tstock*(0.5),'","Remain Stock',stock,'","Remain Money',money,'],')
                     k += 1
                 else:
                     tstock = stock
@@ -108,7 +108,7 @@ if fdate != now and ldate <= now and ldate > fdate:
                     stock = 0
                     money = money * sellrate
                     print('["',interes[x][0],'","sell","',price,'","',tstock,'","',stock,'","',money,'"]')
-                    # print('["Date":"',interes[x][0],'","Trane":"sell","Price":"',price,'","Dealing_Stock":',tstock,'","Remain Stock',stock,'","Remain Money',money,'],')
+                    # print('["Date":"',interes[x][0],'","Trend":"sell","Price":"',price,'","Dealing_Stock":',tstock,'","Remain Stock',stock,'","Remain Money',money,'],')
                     k = 0
     tstock = 0
     if stock == 0:
