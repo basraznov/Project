@@ -9,7 +9,7 @@ money = int(sys.argv[4])
 # = datetime.strptime(fdate, '%Y-%m-%d')
 fdate = datetime.datetime.strptime(fdate, "%Y-%m-%d").date()
 ldate = datetime.datetime.strptime(ldate, "%Y-%m-%d").date()
-print(fdate,ldate)
+# print(fdate,ldate)
 p = pt.predic(symbol)
 # datetime yyyy mm dd
 # fdate = datetime.date(2018, 1, 1)
@@ -57,7 +57,7 @@ if fdate != now and ldate <= now:
     tstock = 0
 
     for x in range(len(interes)):
-        print(interes[x])
+        # print(interes[x])
         price = interes[x][1]
         if interes[x][2] == 'Buy ' and money != 0:
             money = money / buyrate
