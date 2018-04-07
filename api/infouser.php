@@ -1,5 +1,6 @@
 <?php
     include("database.php");
+    header('Content-Type: application/json');
     session_start();
     if(isset($_SESSION['username']) && isset($_POST['status'])){
         $username = $_SESSION['username'];
