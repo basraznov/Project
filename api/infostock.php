@@ -109,12 +109,22 @@
                     $startmper = date("Y-m-d",$startmper );
                     $p++;
                 }
-
+                $stmt = $db->prepare("SELECT stock from `favorite` where username = ?;");
+                $stmt->bind_param('s',$username);  
+                $stmt->execute();
+                $result = mysqli_stmt_get_result($stmt);
+                $isfav = 0;
+                while ($row = mysqli_fetch_array($result, MYSQLI_NUM)){
+                    if($stock === $row[0]){
+                        $isfav = 1;
+                        break;
+                    }
+                }
                 if($date != $last_update){
-                    echo '{"status":"Success","date":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","percent_change":"'.$row_data['ChPer'].'","openM":"'.$mopen.'","highM":"'.$mhigh.'","lowM":"'.$mlow.'","lastM":"'.$mlast.'","percent_changeM":"'.$mper.'","fday":"'.$fmdate.'","lday":"'.$lmdate.'","trend":"None","last_update":"'.$last_update.'"}';
+                    echo '{"status":"Success","date":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","percent_change":"'.$row_data['ChPer'].'","openM":"'.$mopen.'","highM":"'.$mhigh.'","lowM":"'.$mlow.'","lastM":"'.$mlast.'","percent_changeM":"'.$mper.'","fday":"'.$fmdate.'","lday":"'.$lmdate.'","trend":"None","last_update":"'.$last_update.'","isfavorite":"'.$isfav.'"}';
                 }
                 else{
-                    echo '{"status":"Success","date":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","percent_change":"'.$row_data['ChPer'].'","openM":"'.$mopen.'","highM":"'.$mhigh.'","lowM":"'.$mlow.'","lastM":"'.$mlast.'","percent_changeM":"'.$mper.'","fday":"'.$fmdate.'","lday":"'.$lmdate.'","trend":"'.$trend.'","last_update":"'.$last_update.'"}';
+                    echo '{"status":"Success","date":"'.$row_data['Date'].'","open":"'.$row_data['Open'].'","high":"'.$row_data['High'].'","low":"'.$row_data['Low'].'","last":"'.$row_data['Last'].'","percent_change":"'.$row_data['ChPer'].'","openM":"'.$mopen.'","highM":"'.$mhigh.'","lowM":"'.$mlow.'","lastM":"'.$mlast.'","percent_changeM":"'.$mper.'","fday":"'.$fmdate.'","lday":"'.$lmdate.'","trend":"'.$trend.'","last_update":"'.$last_update.'","isfavorite":"'.$isfav.'"}';
                     
                 }
                 break;

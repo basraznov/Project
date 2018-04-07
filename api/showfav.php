@@ -10,8 +10,10 @@
         $k = "[";
         $result = mysqli_stmt_get_result($stmt);
         while ($row = mysqli_fetch_array($result, MYSQLI_NUM)){
-            $k = $k.'"'.$row[1].'",';  
+            // $k = $k.'"'.$row[1].'",';
+            echo $row[1];
         }
+        die();
         $k = rtrim($k,",");
         echo '{"status":"Success","stock":'.$k.']}';
     }

@@ -12,8 +12,6 @@ if(isset($_SESSION['username']) && isset($_POST['fdate']) && isset($_POST['ldate
     $stmt->bind_param('s',$stock);
     $stmt->execute();
     $stmt->store_result(); 
-    // echo preg_match("\d{4}-\d{2}-\d{2}",$fdate);
-
     if ($stmt->num_rows >= 1 && preg_match('/^[0-9]+$/',$money) && preg_match("/^\d{4}-\d{2}-\d{2}+$/",$fdate) && preg_match("/^\d{4}-\d{2}-\d{2}+$/",$ldate)){
         $date = $fdate;
         $k = 0;
