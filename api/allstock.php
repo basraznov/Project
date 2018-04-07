@@ -21,12 +21,12 @@
         $result = mysqli_stmt_get_result($stmt);
         $myfile = fopen("../main/PD.txt", "r") or die("Unable to open file!");
         $file = fread($myfile,filesize("../main/PD.txt"));
-        $file = explode("], [",$file);
         $k = '{"status":"Success",';
         if($file === "None"){
             $trend = "Hold";
         }
-        else{   
+        else{
+            $file = explode("], [",$file);   
             foreach ($file as &$value) {
                 $value = explode(", ",$value);
                 foreach ($value as &$supva){
@@ -34,10 +34,14 @@
                 }
             }
         }
-        // var_dump($file);
         $x = 0;
         while ($row = mysqli_fetch_array($result, MYSQLI_NUM)){
-            $trend = searchForId($row[1],$file);
+            if($file === "None"){
+                $trend = "Hold";
+            }
+            else{
+                $trend = searchForId($row[1],$file);
+            }
             $k = $k.'"'.$x.'":["'.$row[1].'","'.$row[2].'","'.$row[5].'","'.$row[6].'","'.$row[7];//.'","'.$row[6].'","'.$row[7].'","'.$row[8];
             if($trend != false){
                 $k = $k.'","'.$trend.'"],';
