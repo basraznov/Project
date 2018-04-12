@@ -22,7 +22,7 @@
                     $k++;
                 }
                 if(isset($_POST['newpassword'])){
-                    $newpass = $_POST['newpassword'];
+                    $newpass = hash('sha256',$_POST['newpassword']);
                     $stmt = $db->prepare("UPDATE `user` SET Password = ? WHERE  Username = ?");
                     $stmt->bind_param("ss", $newpass, $username);
                     $stmt->execute();
