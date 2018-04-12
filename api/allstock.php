@@ -42,7 +42,30 @@
             else{
                 $trend = searchForId($row[1],$file);
             }
-            $k = $k.'"'.$x.'":["'.$row[1].'","'.$row[2].'","'.$row[5].'","'.$row[6].'","'.$row[7];//.'","'.$row[6].'","'.$row[7].'","'.$row[8];
+
+            $stmt = $db->prepare("SELECT * from `company` where symbol = ?;");
+            $stmt->bind_param('s',$row[1]);
+            $stmt->execute();
+            $temp1 = mysqli_stmt_get_result($stmt);
+            $temp2 = mysqli_fetch_array($temp1, MYSQLI_NUM);
+            $stmt->close();
+            if (strpos($row[1], '-') !== false) {
+                if($temp2[2] === 'mai'){
+                    $m = '"3",';
+                }
+                else{
+                    $m = '"1",';
+                }
+            }
+            else{
+                if($temp2[2] === 'mai'){
+                    $m = '"2",';
+                }
+                else{
+                    $m = '"0",';
+                }
+            }
+            $k = $k.'"'.$x.'":['.$m.'"'.$row[1].'","'.$row[2].'","'.$row[5].'","'.$row[6].'","'.$row[7];//.'","'.$row[6].'","'.$row[7].'","'.$row[8];
             if($trend != false){
                 $k = $k.'","'.$trend.'"],';
                 }
