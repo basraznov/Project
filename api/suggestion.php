@@ -1,5 +1,6 @@
 <?php
     include("database.php");
+    include("lastupdate.php");
     header('Content-Type: application/json');
     session_start();
     if(isset($_SESSION['username'])){
@@ -23,11 +24,20 @@
                 $stmt->execute();
                 $result = mysqli_stmt_get_result($stmt);
                 $row = mysqli_fetch_array($result, MYSQLI_NUM);
+
+                $last_update = $date;
+                $stmt2 = $db->prepare("SELECT * from `trade` where  symbol = ? and date = ?;");
+                $stmt2->bind_param('ss',$value,$date);
+                $stmt2->execute();
+                $result2 = mysqli_stmt_get_result($stmt2);
+                $row2 = mysqli_fetch_array($result2, MYSQLI_NUM);
+                // var_dump($row2);
+
                 if($row[2] === "SET"){
-                    $s = $s.'"'.$value.'",';
+                    $s = $s.'"'.$value.'","'.$row2[6].'",';
                 }
                 if($row[2] === "mai"){
-                    $m = $m.'"'.$value.'",';
+                    $m = $m.'"'.$value.'","'.$row2[6].'",';
                 }
             }
             $s = rtrim($s,",");
