@@ -100,7 +100,7 @@
                         $mper = number_format($mper, 2, '.', '');
                         break;
                     }
-                    if($p > 4){
+                    if($p > 6){
                         $mper = "None";
                         break;
                     }
@@ -129,7 +129,7 @@
                 }
                 break;
             }
-            if($k > 4){
+            if($k > 6){
                 echo '{"status":"This stock is not up to date or don\'t have this stock"}';
                 break;
             }
