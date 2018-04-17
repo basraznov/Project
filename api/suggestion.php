@@ -31,7 +31,6 @@
                 $stmt2->execute();
                 $result2 = mysqli_stmt_get_result($stmt2);
                 $row2 = mysqli_fetch_array($result2, MYSQLI_NUM);
-                // var_dump($row2);
 
                 if($row[2] === "SET"){
                     $s = $s.'"'.$value.'","'.$row2[6].'",';

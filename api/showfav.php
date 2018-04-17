@@ -12,7 +12,6 @@
         }
         return false;
     }
-
     if(isset($_SESSION['username'])){
         $last_update = $date;
         $username = $_SESSION['username'];
