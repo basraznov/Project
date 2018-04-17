@@ -11,11 +11,13 @@ fdate = datetime.datetime.strptime(fdate, "%Y-%m-%d").date()
 ldate = datetime.datetime.strptime(ldate, "%Y-%m-%d").date()
 # print(fdate,ldate)
 p = pt.predic(symbol)
+if p == None:
+    print("error")
+    exit()
 # datetime yyyy mm dd
 # fdate = datetime.date(2018, 1, 1)
 # ldate = datetime.date(2018, 4, 1)
 now = datetime.datetime.now().date()
-
 ft = 0
 lt = 0
 if fdate != now and ldate <= now and ldate > fdate:
