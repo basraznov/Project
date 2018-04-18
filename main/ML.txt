@@ -1,1 +1,1 @@
-['AAV', 'AMANAH', 'AOT', 'BLAND', 'BTS', 'CHG', 'ECL', 'HOTPOT', 'MAX', 'PSTC', 'QH', 'SEAOIL', 'SPPT', 'THCOM', 'TRUE', 'UWC', 'VGI', 'BDMS', 'COM7', 'BEM', 'BM', 'CPT']
+['DIMET', 'EFORL', 'TSF', 'NEWS', 'HPT', 'T', 'KOOL', 'DIGI']
