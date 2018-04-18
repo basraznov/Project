@@ -31,7 +31,7 @@ def getAllLastpredic():
             m += 1
 
     #     print([symbol[x],temp2[2]])
-    # print(m,n,len(allLast))
+    print(allLast)
     if not allLast:
         file = open('PD.txt','w')
         file.write("None")
