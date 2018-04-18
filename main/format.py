@@ -1,5 +1,7 @@
 import pymysql
 import re
+import init as it
+
 
 def flaot2deciamal(data):
 	data = [ '%.3f' % elem for elem in data ]
@@ -17,7 +19,7 @@ def getLast(data):
 
 
 def getData(Symbol):
-	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+	db = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
 	sql = "SELECT * FROM `trade` WHERE Symbol = %s"
 	data=[Symbol]
 	cursor = db.cursor()
@@ -60,7 +62,7 @@ def AVG(data):
 	return avg
 
 def allSymbol():
-	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+	db = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
 	sql = "SELECT DISTINCT Symbol from trade"
 	cursor = db.cursor()
 	cursor.execute(sql)
@@ -70,7 +72,7 @@ def allSymbol():
 	return results
 
 def getDate(Symbol):
-	db = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+	db = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
 	sql = "SELECT date,last FROM `trade` WHERE Symbol = %s"
 	data=[Symbol]
 	cursor = db.cursor()

@@ -4,6 +4,7 @@ import re
 import MySQLdb
 from datetime import datetime
 import sys
+import init as it
 
 SETCSurl = 'https://marketdata.set.or.th/mkt/commonstocklistresult.do?market=SET&type=S'#SET Common Stocks 1
 SETWurl = 'https://marketdata.set.or.th/mkt/stocklistbytype.do?market=SET&language=en&country=US&type=W' #SET Warrants 2
@@ -57,7 +58,7 @@ def GetdateFromWeb(url):
     return stocks
 
 def addNewCompany(symbol):
-    mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+    mydb = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
     sql = "SELECT * from `company` where Symbol = %s"
     data = [symbol]
     cursor = mydb.cursor()

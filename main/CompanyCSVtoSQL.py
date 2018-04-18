@@ -1,7 +1,8 @@
 import csv
 import pymysql
+import init as it
 
-mydb = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+mydb = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
 cursor = mydb.cursor()
 csv_data = csv.reader(open('Company.csv'))
 i = 0
