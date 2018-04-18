@@ -47,10 +47,13 @@ if(isset($_SESSION['username']) && isset($_POST['fdate']) && isset($_POST['ldate
             unset($result[count($result)-1]);
             foreach($result as $line){
                 if($result[count($result)-1] === $line){
+                    
                     $m = $m.',"summary":'.$line;
                 }
                 else{
-                    $m = $m.',"'.$x.'":'.$line;
+                    $line =  explode(",",$line);
+                    $line = preg_replace('/[^a-z0-9\-.]/i', '', $line);
+                    $m = $m.',"'.$x.'":["'.$line[0].'","'.$line[1].'","'.number_format($line[2], 2).'","'.number_format($line[3], 2).'","'.number_format($line[4], 2).'"]';
                     $x++;
                 }
             } 
