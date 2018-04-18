@@ -1,7 +1,7 @@
 import requests
 from lxml import html
 import re
-import MySQLdb
+import pymysql
 from datetime import datetime
 import sys
 import init as it
@@ -107,7 +107,7 @@ def tosql(input):
     print("Adding to SQL ........")
     input = list(input)
     name = []
-    mydb = MySQLdb.connect(host='127.0.0.1',user='root',passwd='',db='Project')
+    mydb = pymysql.connect(host='127.0.0.1',user='root',passwd='',db='Project')
     date = str(datetime.now()).split(" ")[0]
     for x in range(len(input)-1):
         data = [date,input[x][0],input[x][1],input[x][2],input[x][3],input[x][4],input[x][6],input[x][9],input[x][10]]
