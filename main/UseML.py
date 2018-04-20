@@ -39,6 +39,7 @@ def collectFinal(Symbol):
     if Vol[-1] < 10000000:
         return None
     day = (datetime.datetime.now().date()-Date[-1]).days
+    # day = 4
     if len(stock) < 60 or day > 5:
         return None
     if Symbol.find('-') != -1:
@@ -165,13 +166,16 @@ for x in range(len(listSymbol)):
         continue
     testset.append(k)
     testSymbol.append(listSymbol[x])
-print()
+if not testset:
+    # print(Interest_Symbol)
+    file = open('ML.txt','w')
+    file.write("None")
+else:
+    p = model.predict(testset)
+    for x in range(len(testSymbol)):
+        if p[x] > 0.5:
+            Interest_Symbol.append(testSymbol[x])
 
-p = model.predict(testset)
-for x in range(len(testSymbol)):
-    if p[x] > 0.5:
-        Interest_Symbol.append(testSymbol[x])
-
-print(Interest_Symbol)
-file = open('ML.txt','w')
-file.write(str(Interest_Symbol))
+    print(Interest_Symbol)
+    file = open('ML.txt','w')
+    file.write(str(Interest_Symbol))

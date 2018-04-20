@@ -1,1 +1,1 @@
-['DIMET', 'EFORL', 'TSF', 'NEWS', 'HPT', 'T', 'KOOL', 'DIGI']
+None
