@@ -30,7 +30,7 @@ def FormatData(input):
             x = x + 8
             continue
         else:
-            if (input[x].find(' ') != -1 or input[x] == 'SP' or input[x] == 'NP' or input[x] == 'XR' or input[x] == 'XD' or input[x] == 'XA' or input[x] == 'XW' or input[x] == 'XN' or input[x] == 'XB') and input[x] != 'S & J':
+            if (input[x].find(' ') != -1 or input[x] == 'SP' or input[x] == 'NP' or input[x] == 'XR' or input[x] == 'XD' or input[x] == 'XA' or input[x] == 'XW' or input[x] == 'XN' or input[x] == 'XB' or input[x] == 'H') and input[x] != 'S & J':
                 x = x + 1
                 continue
 
