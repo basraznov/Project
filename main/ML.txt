@@ -1,1 +1,1 @@
-['AMATA', 'BECL', 'BMCL', 'EA', 'FPI', 'MAX', 'MILL', 'PAE', 'PTTGC', 'RICH', 'SENA', 'SGP', 'SSI', 'THANI', 'TMB', 'VTE', 'JASIF', 'U', 'GPSC', 'TU', 'TT', 'SPRC', 'TRITN']
+['AMATA', 'EA', 'FPI', 'MAX', 'MILL', 'PTTGC', 'SENA', 'SGP', 'THANI', 'TMB', 'VTE', 'JASIF', 'U', 'GPSC', 'TU', 'SPRC', 'TRITN']

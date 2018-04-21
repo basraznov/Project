@@ -39,8 +39,9 @@ def collectFinal(Symbol):
     if Vol[-1] < 10000000:
         return None
     day = (datetime.datetime.now().date()-Date[-1]).days
-    day = 4
+    # day = (datetime.date(2017, 12, 4)-Date[-1]).days
     if len(stock) < 60 or day > 5:
+        print (day,Symbol)
         return None
     if Symbol.find('-') != -1:
         return None
