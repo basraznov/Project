@@ -20,7 +20,7 @@ def getLast(data):
 
 def getData(Symbol):
 	db = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
-	# sql = "SELECT * FROM `trade` WHERE Symbol = %s and date <= '2017-12-08'"
+	# sql = "SELECT * FROM `trade` WHERE Symbol = %s and date <= '2017-01-01'"
 	sql = "SELECT * FROM `trade` WHERE Symbol = %s"
 	data=[Symbol]
 	cursor = db.cursor()
@@ -74,7 +74,7 @@ def allSymbol():
 
 def getDate(Symbol):
 	db = pymysql.connect(host=it.hostip,user=it.userdatebase,passwd=it.passdatabase,db=it.datebasename)
-	# sql = "SELECT date,last FROM `trade` WHERE Symbol = %s and date <= '2017-12-08'"
+	# sql = "SELECT date,last FROM `trade` WHERE Symbol = %s and date <= '2018-01-01'"
 	sql = "SELECT * FROM `trade` WHERE Symbol = %s"
 	data=[Symbol]
 	cursor = db.cursor()
